@@ -1,0 +1,38 @@
+@use '../../styles/colors.scss' as colors;
+
+.title {
+  font-size: 18px;
+  color: colors.$gray;
+}
+
+.meta {
+  color: colors.$dark-gray;
+  margin-top: 6px;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 40px;
+  font-size: 15px;
+  display: flex;
+}
+
+.tag {
+  text-decoration: none;
+  color: inherit;
+  transition: text-decoration 0.2s ease;
+
+  &:hover {
+    color: colors.$white;
+  }
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.content {
+  color: colors.$white;
+  font-size: 13px;
+  line-height: 22px;
+}

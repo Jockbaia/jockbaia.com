@@ -1,0 +1,81 @@
+@use '../../styles/colors.scss' as colors;
+
+.header {
+  & {
+    background-color: colors.$black;
+    width: 100%;
+    color: colors.$white;
+    height: 42px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    margin: 50px 0 60px 0;
+    gap: 25px;
+  }
+
+  &__content {
+    max-width: 760px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    position: relative;
+    width: 125px;
+    filter: drop-shadow(0px 0px 0px colors.$black);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: none;
+      filter: invert(0%) sepia(3%) saturate(2%) hue-rotate(288deg) brightness(103%) contrast(101%);
+    }
+  }
+
+  &__cursor {
+    color: colors.$yellow;
+    font-size: 19px;
+    animation: blink 1s steps(1, start) infinite;
+  }
+}
+
+.menu {
+  &__list {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__list a {
+    color: colors.$yellow;
+    cursor: pointer;
+    text-transform: lowercase;
+    text-align: center;
+    justify-content: center;
+    width: 40px;
+    margin-top: 7px;
+    font-size: 13px;
+    line-height: 14px;
+
+    &:hover {
+      text-decoration: none;
+      filter: invert(0%) sepia(3%) saturate(2%) hue-rotate(288deg) brightness(103%) contrast(101%);
+    }
+  }
+
+  &__item {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

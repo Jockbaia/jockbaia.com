@@ -1,0 +1,39 @@
+@use './colors.scss' as colors;
+
+@font-face {
+  font-family: 'Pixel Arial 14';
+  src: url('/fonts/pixel-arial-14.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  background-color: colors.$black;
+  font-family: 'Pixel Arial 14', serif;
+  padding: 0;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+em {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  color: colors.$gray;
+}
