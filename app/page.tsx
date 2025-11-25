@@ -29,10 +29,14 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
   const [day, month, year] = data.date.split('-');
   const formattedDate = `${year}-${month}-${day}`;
 
+  const compressedThumb = data.thumb
+    .replace('/i/', '/t/')
+    .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+
   return {
     id,
     title: data.title,
-    thumb: data.thumb,
+    thumb: compressedThumb,
     date: data.date,
     sortableDate: formattedDate,
   };

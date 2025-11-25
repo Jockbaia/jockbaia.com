@@ -37,7 +37,9 @@ function getArticlesByTag(fileNames: string[], tag: string) {
 
       const thumb = data.thumb.startsWith('/i/')
         ? data.thumb
-        : `/i/${data.thumb.replace(/^i\//, '')}`;
+            .replace('/i/', '/t/')
+            .replace(/\.(jpg|jpeg|png)$/i, '.webp')
+        : `/t/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
 
       return {
         id,

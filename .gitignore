@@ -13,6 +13,9 @@
 /out/
 /custom-output/
 
+# thumbnails
+/public/t
+
 # production
 /build
 
