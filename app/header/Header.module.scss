@@ -23,7 +23,6 @@
 
   &__logo {
     position: relative;
-    width: 125px;
     filter: drop-shadow(0px 0px 0px colors.$black);
     cursor: pointer;
 
@@ -77,5 +76,18 @@
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .header {
+    & {
+      margin: 30px 0 110px;
+    }
+
+    &__content {
+      flex-direction: column;
+      gap: 10px;
+    }
   }
 }
