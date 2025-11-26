@@ -6,7 +6,7 @@ import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
 
-const DATA_DIRECTORY = path.join(process.cwd(), 'data');
+const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
 // +++ Markdown handling +++
 

@@ -6,19 +6,26 @@ import html from 'remark-html';
 import styles from './page.module.scss';
 import Link from 'next/link';
 
+const POSTS_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+
 // +++ Markdown handling +++
 
+function getMarkdownFileNames(postsDirectory: string): string[] {
+  return fs
+    .readdirSync(postsDirectory)
+    .filter(
+      (file) =>
+        fs.statSync(path.join(postsDirectory, file)).isFile() &&
+        file.endsWith('.md')
+    );
+}
+
 export async function generateStaticParams() {
-  const dataDirectory = path.join(process.cwd(), 'data');
-  const fileNames = getMarkdownFileNames(dataDirectory);
+  const fileNames = getMarkdownFileNames(POSTS_DIRECTORY);
 
   return fileNames.map((fileName) => ({
     id: fileName.replace(/\.md$/, ''),
   }));
-}
-
-function getMarkdownFileNames(dataDirectory: string): string[] {
-  return fs.readdirSync(dataDirectory);
 }
 
 function parseMarkdownFile(dataDirectory: string, fileName: string) {
@@ -56,11 +63,10 @@ function preprocessMarkdownContent(content: string): string {
 // +++ Home and Article rendering +++
 
 export default async function Home() {
-  const dataDirectory = path.join(process.cwd(), 'data');
-  const fileNames = getMarkdownFileNames(dataDirectory);
+  const fileNames = getMarkdownFileNames(POSTS_DIRECTORY);
 
   const articles = fileNames.map((fileName) =>
-    parseMarkdownFile(dataDirectory, fileName)
+    parseMarkdownFile(POSTS_DIRECTORY, fileName)
   );
 
   articles.sort(

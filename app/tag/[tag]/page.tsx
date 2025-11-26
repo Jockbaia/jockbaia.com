@@ -4,7 +4,7 @@ import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
 
-const DATA_DIRECTORY = path.join(process.cwd(), 'data');
+const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
 // +++ Tag handling +++
 
