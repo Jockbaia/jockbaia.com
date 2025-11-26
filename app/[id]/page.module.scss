@@ -35,4 +35,7 @@
   color: colors.$white;
   font-size: 13px;
   line-height: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

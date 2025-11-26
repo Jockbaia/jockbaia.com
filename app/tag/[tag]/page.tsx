@@ -35,11 +35,12 @@ function getArticlesByTag(fileNames: string[], tag: string) {
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data } = matter(fileContents);
 
+      // Replace image with thumbnail
       const thumb = data.thumb.startsWith('/i/')
         ? data.thumb
-            .replace('/i/', '/t/')
+            .replace('/i/', '/i/sm/')
             .replace(/\.(jpg|jpeg|png)$/i, '.webp')
-        : `/t/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
+        : `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
 
       return {
         id,

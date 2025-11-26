@@ -3,8 +3,6 @@ import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
 import { Calendar, Tag } from 'lucide-react';
-import { remark } from 'remark';
-import html from 'remark-html';
 import Link from 'next/link';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data');
@@ -35,8 +33,33 @@ function getMarkdownFileData(fullPath: string) {
 }
 
 async function convertMarkdownToHtml(content: string) {
-  const processedContent = await remark().use(html).process(content);
-  return processedContent.toString();
+  const processedContent = content
+    // Handle images with descriptions
+    .replace(
+      /!\[([^\]]*)\]\((\/i\/[^\)]+)\)\s*\n\*([^\*]+)\*/g,
+      (match, altText, imagePath, description) => {
+        const mdImagePath = imagePath
+          .replace('/i/', '/i/md/')
+          .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+        return `<figure>
+                  <a href="${imagePath}" target="_blank" rel="noopener noreferrer">
+                    <img src="${mdImagePath}" alt="${altText}" />
+                  </a>
+                  <figcaption><em>${description.trim()}</em></figcaption>
+                </figure>`;
+      }
+    )
+    // Handle all other images
+    .replace(/!\[([^\]]*)\]\((\/i\/[^\)]+)\)/g, (match, altText, imagePath) => {
+      const mdImagePath = imagePath
+        .replace('/i/', '/i/md/')
+        .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      return `<a href="${imagePath}" target="_blank" rel="noopener noreferrer">
+                <img src="${mdImagePath}" alt="${altText}" />
+              </a>`;
+    });
+
+  return processedContent;
 }
 
 // +++ Article rendering +++

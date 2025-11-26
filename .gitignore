@@ -14,7 +14,8 @@
 /custom-output/
 
 # thumbnails
-/public/t
+/public/i/md
+/public/i/sm
 
 # production
 /build

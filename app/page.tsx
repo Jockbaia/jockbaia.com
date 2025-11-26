@@ -26,19 +26,18 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
   const fullPath = path.join(dataDirectory, fileName);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data } = matter(fileContents);
-  const [day, month, year] = data.date.split('-');
-  const formattedDate = `${year}-${month}-${day}`;
 
-  const compressedThumb = data.thumb
-    .replace('/i/', '/t/')
-    .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+  // Replace image with thumbnail
+  const thumb = data.thumb.startsWith('/i/')
+    ? data.thumb.replace('/i/', '/i/sm/').replace(/\.(jpg|jpeg|png)$/i, '.webp')
+    : `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
 
   return {
     id,
     title: data.title,
-    thumb: compressedThumb,
+    thumb,
     date: data.date,
-    sortableDate: formattedDate,
+    sortableDate: data.date.split('-').reverse().join('-'),
   };
 }
 
