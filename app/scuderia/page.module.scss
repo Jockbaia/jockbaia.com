@@ -1,0 +1,103 @@
+@use '../../styles/colors.scss' as colors;
+
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.article {
+    &__meta {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.track {
+    &__wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    &__title {
+        font-size: 16px;
+        margin-bottom: 3px;
+        color: colors.$yellow;
+    }
+
+    &__artist {
+        color: colors.$yellow;
+        font-size: 12px;
+    }
+
+    &__album {
+        margin-top: 5px;
+        color: colors.$yellow;
+        font-size: 11px;
+        font-style: italic;
+    }
+
+    &__thumbnail {
+        width: 100px;
+        height: 100px;
+    }
+
+    &__genres {
+        color: colors.$dark-gray;
+        font-size: 12px;
+        margin-top: 8px;
+        line-height: 15px;
+    }
+
+    &__date {
+        color: colors.$yellow;
+        text-transform: uppercase;
+        text-align: center;
+        border: 1px dashed colors.$gray;
+        width: 100px;
+        padding: 6px;
+        font-size: 10px;
+        height: 23px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__content {
+        color: colors.$white;
+        margin-top: 8px;
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    &__youtube {
+        color: #ff0;
+        background-color: #000;
+        border: 1px solid #ff0;
+        border-radius: 5px;
+        width: 30px;
+        font-size: 12px;
+        text-decoration: none;
+        position: absolute;
+        padding: 3px 9px;
+        bottom: 0;
+        right: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            background-color: #ff0;
+            color: black;
+        }
+    }
+}
