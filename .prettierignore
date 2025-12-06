@@ -3,3 +3,4 @@ dist/
 .next/
 public/
 next-env.d.ts
+out/
