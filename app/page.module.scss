@@ -43,6 +43,13 @@
   margin-bottom: 10px;
 }
 
+.excerpt {
+  color: colors.$white;
+  margin-top: 14px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
 @media (max-width: 810px) {
   .card {
     padding: 25px;

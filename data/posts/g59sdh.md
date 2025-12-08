@@ -3,6 +3,7 @@ title: 'Hello world'
 date: '01-09-2024'
 tags: ['blog']
 thumb: '/i/g59sdh/1.jpg'
+excerpt: 'In the midst of a web of stimuli, does it make sense to carve out a quiet space to let a bunch of human-made content flow freely?'
 ---
 
 A blog? In 2024? What’s the point of sharing thoughts in a place so far removed from modern social networks? It’s like sending memories and ideas to a remote, inaccessible post office, where no one but a few isolated travellers will read the contents.

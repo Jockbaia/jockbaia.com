@@ -30,7 +30,7 @@ export default function Header() {
                 About
               </li>
             </Link>
-            <Link href={`/tag/blog`}>
+            <Link href={`/blog`}>
               <li className={styles.menu__item}>
                 <img
                   src="/i/icons/blog.svg"
