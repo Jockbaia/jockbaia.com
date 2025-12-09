@@ -8,7 +8,7 @@ export default function Header() {
         <Link href={`/`}>
           <div className={styles.header__logo}>
             <img
-              src="/i/header.png"
+              src="/i/header/jockbaia.png"
               className="floating"
               alt="Header Logo"
               width="80"
