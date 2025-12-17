@@ -8,7 +8,7 @@
 }
 
 .title {
-  font-size: 13px;
+  font-size: 15px;
   color: colors.$gray;
   line-height: 18px;
   margin-bottom: 6px;
@@ -32,7 +32,7 @@
 
 .date {
   color: colors.$dark-gray;
-  font-size: 13px;
+  font-size: 14px;
   margin-top: -4px;
 }
 
@@ -46,8 +46,8 @@
 .excerpt {
   color: colors.$white;
   margin-top: 14px;
-  font-size: 11px;
-  line-height: 16px;
+  font-size: 13px;
+  line-height: 17px;
 }
 
 @media (max-width: 810px) {

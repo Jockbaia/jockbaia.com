@@ -14,7 +14,7 @@ export default function Header() {
               width="80"
               height="80"
             />
-            <span className={styles.header__cursor}>_</span>
+            {/* <span className={styles.header__cursor}>_</span> */}{' '}
           </div>
         </Link>
         <nav>

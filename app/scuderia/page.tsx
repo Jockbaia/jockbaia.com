@@ -135,10 +135,10 @@ export default async function ScuderiaPage() {
                       album "{article.album}"
                     </div>
                   )}
+                  <div className={styles.track__content}>{article.content}</div>
                   <div className={styles.track__genres}>
                     {article.genres?.join(', ')}
                   </div>
-                  <div className={styles.track__content}>{article.content}</div>
                 </div>
               </div>
             </React.Fragment>

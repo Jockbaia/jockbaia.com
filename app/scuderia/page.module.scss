@@ -29,20 +29,20 @@
     }
 
     &__title {
-        font-size: 16px;
-        margin-bottom: 3px;
-        color: colors.$yellow;
+        font-size: 19px;
+        margin-bottom: -2px;
+        color: colors.$gray;
     }
 
     &__artist {
-        color: colors.$yellow;
-        font-size: 12px;
+        color: colors.$gray;
+        font-size: 14px;
     }
 
     &__album {
         margin-top: 5px;
         color: colors.$yellow;
-        font-size: 11px;
+        font-size: 14px;
         font-style: italic;
     }
 
@@ -52,20 +52,20 @@
     }
 
     &__genres {
-        color: colors.$dark-gray;
-        font-size: 12px;
+        color: colors.$gray;
+        font-size: 14px;
         margin-top: 8px;
         line-height: 15px;
     }
 
     &__date {
-        color: colors.$yellow;
+        color: colors.$gray;
         text-transform: uppercase;
         text-align: center;
-        border: 1px dashed colors.$gray;
+        border: 1px dotted colors.$dark-gray;
         width: 100px;
         padding: 6px;
-        font-size: 10px;
+        font-size: 12px;
         height: 23px;
         display: flex;
         justify-content: center;
@@ -73,10 +73,10 @@
     }
 
     &__content {
-        color: colors.$white;
+        color: #fff;
         margin-top: 8px;
-        font-size: 11px;
-        line-height: 16px;
+        font-size: 14px;
+        line-height: 20px;
     }
 
     &__youtube {
