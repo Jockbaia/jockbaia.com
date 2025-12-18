@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "npm run compress-thumbnails && next build",
+    "postbuild": "node scripts/generate-sitemap.js",
     "compress-thumbnails": "node scripts/compress-thumbnails.js",
     "dev": "npm run compress-thumbnails && next dev",
     "start": "next start",

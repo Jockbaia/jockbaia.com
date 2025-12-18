@@ -17,6 +17,9 @@
 /public/i/md
 /public/i/sm
 
+# sitemaps
+/public/sitemap.xml
+
 # production
 /build
 
