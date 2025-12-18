@@ -5,8 +5,36 @@ import styles from './page.module.scss';
 import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
+import { Metadata } from 'next';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+
+// +++ Metadata handling +++
+
+export async function generateMetadata({ params }) {
+  const resolvedParams =
+    typeof params.then === 'function' ? await params : params;
+  const { id } = resolvedParams;
+  try {
+    const fullPath = getMarkdownFilePath(id);
+    const { data } = getMarkdownFileData(fullPath);
+    return {
+      title: data.title || '',
+      description: data.excerpt || '',
+      openGraph: {
+        images: data.thumb ? [data.thumb] : [],
+      },
+      twitter: {
+        images: data.thumb ? [data.thumb] : [],
+      },
+    };
+  } catch (e) {
+    return {
+      title: 'Not found',
+      description: '',
+    };
+  }
+}
 
 // +++ Markdown handling +++
 

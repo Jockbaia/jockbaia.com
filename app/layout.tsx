@@ -3,6 +3,7 @@ import Header from './header/Header';
 import Script from 'next/script';
 
 export const metadata = {
+  metadataBase: new URL('https://jockbaia.com'),
   title: 'Jockbaia',
   description: 'what a day for a daydream',
 };
