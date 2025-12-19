@@ -76,6 +76,12 @@ export default async function Home() {
 
   return (
     <div className={styles.container}>
+      <a
+        rel="me"
+        href="https://social.picopod.fm/@jockbaia"
+        tabIndex={-1}
+        aria-hidden="true"
+      ></a>
       <div className={styles.grid}>
         {articles.map((article) => (
           <Link

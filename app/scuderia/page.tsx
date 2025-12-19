@@ -44,7 +44,7 @@ function getArticles(fileNames: string[]) {
           : '',
         formattedDate: data.released ? formatDate(data.released) : '',
         content,
-        album: data.album,
+        album: data.album || null,
         youtube: data.youtube,
       };
     })
@@ -131,8 +131,15 @@ export default async function ScuderiaPage() {
                   </div>
                   {article.album && (
                     <div className={styles.track__album}>
-                      from the {new Date(article.formattedDate).getFullYear()}{' '}
+                      From the {new Date(article.formattedDate).getFullYear()}{' '}
                       album "{article.album}"
+                    </div>
+                  )}
+                  {!article.album && (
+                    <div className={styles.track__album}>
+                      Released in{' '}
+                      {new Date(article.formattedDate).getFullYear()} as a
+                      single
                     </div>
                   )}
                   <div className={styles.track__content}>{article.content}</div>

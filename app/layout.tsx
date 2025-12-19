@@ -6,6 +6,9 @@ export const metadata = {
   metadataBase: new URL('https://jockbaia.com'),
   title: 'Jockbaia',
   description: 'what a day for a daydream',
+  other: {
+    'fediverse:creator': '@jockbaia@picopod.fm',
+  },
 };
 
 export default function RootLayout({

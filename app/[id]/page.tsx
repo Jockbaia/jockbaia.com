@@ -19,13 +19,16 @@ export async function generateMetadata({ params }) {
     const fullPath = getMarkdownFilePath(id);
     const { data } = getMarkdownFileData(fullPath);
     return {
-      title: data.title || '',
+      title: data.title + ' | Jockbaia' || '',
       description: data.excerpt || '',
       openGraph: {
         images: data.thumb ? [data.thumb] : [],
       },
       twitter: {
         images: data.thumb ? [data.thumb] : [],
+      },
+      other: {
+        'fediverse:creator': '@jockbaia@picopod.fm',
       },
     };
   } catch (e) {

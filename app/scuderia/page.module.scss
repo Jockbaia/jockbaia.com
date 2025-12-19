@@ -31,17 +31,17 @@
     &__title {
         font-size: 19px;
         margin-bottom: -2px;
-        color: colors.$gray;
+        color: colors.$yellow;
     }
 
     &__artist {
-        color: colors.$gray;
+        color: colors.$yellow;
         font-size: 14px;
     }
 
     &__album {
         margin-top: 5px;
-        color: colors.$yellow;
+        color: colors.$gray;
         font-size: 14px;
         font-style: italic;
     }
