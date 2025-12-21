@@ -7,6 +7,7 @@ export const metadata = {
   description: 'what a day for a daydream',
   other: {
     'fediverse:creator': '@jockbaia@picopod.fm',
+    'google-site-verification': '3rfyCNc1yv3NBpT97mlx9g_0rmMZ1D4f0uizZdyA0q0',
   },
 };
 
