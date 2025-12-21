@@ -18,14 +18,26 @@ export async function generateMetadata({ params }) {
   try {
     const fullPath = getMarkdownFilePath(id);
     const { data } = getMarkdownFileData(fullPath);
+
+    // Use M-sized .webp version of the thumbnail
+    let mdImage = '';
+    if (data.thumb) {
+      if (data.thumb.startsWith('/i/')) {
+        mdImage = data.thumb
+          .replace('/i/', '/i/md/')
+          .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      } else {
+        mdImage = `/i/md/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
+      }
+    }
     return {
       title: data.title + ' | Jockbaia' || '',
       description: data.excerpt || '',
       openGraph: {
-        images: data.thumb ? [data.thumb] : [],
+        images: mdImage ? [mdImage] : [],
       },
       twitter: {
-        images: data.thumb ? [data.thumb] : [],
+        images: mdImage ? [mdImage] : [],
       },
       other: {
         'fediverse:creator': '@jockbaia@picopod.fm',
