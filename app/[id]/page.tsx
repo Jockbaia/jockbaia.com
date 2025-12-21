@@ -89,10 +89,12 @@ export default async function Article({
   const { data, content } = getMarkdownFileData(fullPath);
   const contentHtml = await convertMarkdownToHtml(content);
   const hasBlogTag = Array.isArray(data.tags) && data.tags.includes('blog');
+  const hasPicsTag =
+    Array.isArray(data.tags) && data.tags.includes('photography');
 
   return (
     <div>
-      <Header logo={hasBlogTag ? 'blog' : undefined} />
+      <Header logo={hasBlogTag ? 'blog' : hasPicsTag ? 'pics' : undefined} />
       <div className={styles.container}>
         {/* Title */}
         <div className={styles.title}>{data.title}</div>
