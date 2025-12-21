@@ -15,8 +15,8 @@ export default function Header({ logo }) {
               }
               className="floating"
               alt="Header Logo"
-              width="80"
-              height="80"
+              width="90"
+              height="90"
             />
             {/* <span className={styles.header__cursor}>_</span> */}{' '}
           </div>
