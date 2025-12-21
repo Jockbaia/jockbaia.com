@@ -29,11 +29,11 @@ function generateSitemap(urls) {
 function writeSitemap() {
   const urls = getAllUrls();
   const sitemap = generateSitemap(urls);
-  const publicDir = path.join(process.cwd(), 'public');
-  if (!fs.existsSync(publicDir)) {
-    fs.mkdirSync(publicDir);
+  const outDir = path.join(process.cwd(), 'out');
+  if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir);
   }
-  fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
+  fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap);
 }
 
 writeSitemap();
