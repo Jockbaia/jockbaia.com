@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
 import React from 'react';
+import Header from '../header/Header';
 
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
 
@@ -93,64 +94,69 @@ export default async function ScuderiaPage() {
   const articles = getArticles(getMarkdownFiles());
 
   return (
-    <div className={styles.container}>
-      <div className={styles.grid}>
-        {articles.map((article) => {
-          const formattedDate = extractDateFromFileName(article.id);
-          return (
-            <React.Fragment key={article.id}>
-              <div className={styles.track__wrapper} key={article.id}>
-                <div className={styles.article__meta}>
-                  {formattedDate && (
-                    <div className={styles.track__date}>{formattedDate}</div>
-                  )}
-                  <div style={{ position: 'relative' }}>
-                    {article.thumb && (
-                      <img
-                        src={article.thumb}
-                        alt={article.title}
-                        className={styles.track__thumbnail}
-                      />
+    <div>
+      <Header logo="Scuderia" />
+      <div className={styles.container}>
+        <div className={styles.grid}>
+          {articles.map((article) => {
+            const formattedDate = extractDateFromFileName(article.id);
+            return (
+              <React.Fragment key={article.id}>
+                <div className={styles.track__wrapper} key={article.id}>
+                  <div className={styles.article__meta}>
+                    {formattedDate && (
+                      <div className={styles.track__date}>{formattedDate}</div>
                     )}
-                    {article.youtube && (
-                      <a
-                        href={article.youtube}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.track__youtube}
-                      >
-                        ▶︎
-                      </a>
+                    <div style={{ position: 'relative' }}>
+                      {article.thumb && (
+                        <img
+                          src={article.thumb}
+                          alt={article.title}
+                          className={styles.track__thumbnail}
+                        />
+                      )}
+                      {article.youtube && (
+                        <a
+                          href={article.youtube}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.track__youtube}
+                        >
+                          ▶︎
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  <div className={styles.article__content}>
+                    <div className={styles.track__title}>{article.title}</div>
+                    <div className={styles.track__artist}>
+                      {article.artist?.join(', ')}
+                    </div>
+                    {article.album && (
+                      <div className={styles.track__album}>
+                        From the {new Date(article.formattedDate).getFullYear()}{' '}
+                        album "{article.album}"
+                      </div>
                     )}
+                    {!article.album && (
+                      <div className={styles.track__album}>
+                        Released in{' '}
+                        {new Date(article.formattedDate).getFullYear()} as a
+                        single
+                      </div>
+                    )}
+                    <div className={styles.track__content}>
+                      {article.content}
+                    </div>
+                    <div className={styles.track__genres}>
+                      {article.genres?.join(', ')}
+                    </div>
                   </div>
                 </div>
-                <div className={styles.article__content}>
-                  <div className={styles.track__title}>{article.title}</div>
-                  <div className={styles.track__artist}>
-                    {article.artist?.join(', ')}
-                  </div>
-                  {article.album && (
-                    <div className={styles.track__album}>
-                      From the {new Date(article.formattedDate).getFullYear()}{' '}
-                      album "{article.album}"
-                    </div>
-                  )}
-                  {!article.album && (
-                    <div className={styles.track__album}>
-                      Released in{' '}
-                      {new Date(article.formattedDate).getFullYear()} as a
-                      single
-                    </div>
-                  )}
-                  <div className={styles.track__content}>{article.content}</div>
-                  <div className={styles.track__genres}>
-                    {article.genres?.join(', ')}
-                  </div>
-                </div>
-              </div>
-            </React.Fragment>
-          );
-        })}
+              </React.Fragment>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

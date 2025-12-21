@@ -1,14 +1,18 @@
 import Link from 'next/link';
 import styles from './Header.module.scss';
 
-export default function Header() {
+export default function Header({ logo }) {
   return (
     <header className={styles.header}>
       <div className={styles.header__content}>
         <Link href={`/`}>
           <div className={styles.header__logo}>
             <img
-              src="/i/header/jockbaia.png"
+              src={
+                logo === 'blog'
+                  ? '/i/header/blog.png'
+                  : '/i/header/jockbaia.png'
+              }
               className="floating"
               alt="Header Logo"
               width="80"

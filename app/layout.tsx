@@ -1,5 +1,4 @@
 import '../styles/global.scss';
-import Header from './header/Header';
 import Script from 'next/script';
 
 export const metadata = {
@@ -19,7 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
         <Script
           src="https://stats.picopod.fm/script.js"
           data-website-id="cd1ed67a-ecc1-49d8-b729-26800993865f"

@@ -6,6 +6,7 @@ import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
 import { Metadata } from 'next';
+import Header from '../header/Header';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -87,32 +88,36 @@ export default async function Article({
   const fullPath = getMarkdownFilePath(id);
   const { data, content } = getMarkdownFileData(fullPath);
   const contentHtml = await convertMarkdownToHtml(content);
+  const hasBlogTag = Array.isArray(data.tags) && data.tags.includes('blog');
 
   return (
-    <div className={styles.container}>
-      {/* Title */}
-      <div className={styles.title}>{data.title}</div>
+    <div>
+      <Header logo={hasBlogTag ? 'blog' : undefined} />
+      <div className={styles.container}>
+        {/* Title */}
+        <div className={styles.title}>{data.title}</div>
 
-      {/* Metadata */}
-      <div className={styles.meta}>
-        <Calendar size={15} />
-        {data.date}
-        <Tag size={15} />
-        {data.tags.map((tag: string, index: number) => (
-          <span key={index}>
-            <Link className={styles.tag} href={`/tag/${tag}`}>
-              {tag}
-            </Link>
-            {index < data.tags.length - 1 && ', '}
-          </span>
-        ))}
+        {/* Metadata */}
+        <div className={styles.meta}>
+          <Calendar size={15} />
+          {data.date}
+          <Tag size={15} />
+          {data.tags.map((tag: string, index: number) => (
+            <span key={index}>
+              <Link className={styles.tag} href={`/tag/${tag}`}>
+                {tag}
+              </Link>
+              {index < data.tags.length - 1 && ', '}
+            </span>
+          ))}
+        </div>
+
+        {/* Content */}
+        <article
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
+        />
       </div>
-
-      {/* Content */}
-      <article
-        className={styles.content}
-        dangerouslySetInnerHTML={{ __html: contentHtml }}
-      />
     </div>
   );
 }

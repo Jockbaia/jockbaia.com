@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
+import Header from '../header/Header';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
@@ -90,26 +91,29 @@ export default function BlogPage() {
     : articles;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.grid}>
-        {allEntries.map((article) => (
-          <Link
-            key={article.id}
-            href={article.id === 'scuderia' ? '/scuderia' : `/${article.id}`}
-            className={styles.card}
-          >
-            <img
-              src={article.thumb}
-              alt={article.title}
-              className={styles.thumbnail}
-            />
-            <div className={styles.title}>{article.title}</div>
-            <div className={styles.date}>{article.date}</div>
-            {'excerpt' in article && article.excerpt && (
-              <div className={styles.excerpt}>{article.excerpt}</div>
-            )}
-          </Link>
-        ))}
+    <div>
+      <Header logo={'blog'} />
+      <div className={styles.container}>
+        <div className={styles.grid}>
+          {allEntries.map((article) => (
+            <Link
+              key={article.id}
+              href={article.id === 'scuderia' ? '/scuderia' : `/${article.id}`}
+              className={styles.card}
+            >
+              <img
+                src={article.thumb}
+                alt={article.title}
+                className={styles.thumbnail}
+              />
+              <div className={styles.title}>{article.title}</div>
+              <div className={styles.date}>{article.date}</div>
+              {'excerpt' in article && article.excerpt && (
+                <div className={styles.excerpt}>{article.excerpt}</div>
+              )}
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

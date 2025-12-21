@@ -5,6 +5,7 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import styles from './page.module.scss';
 import Link from 'next/link';
+import Header from './header/Header';
 
 const POSTS_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -35,9 +36,14 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
   const { data } = matter(fileContents);
 
   // Replace image with thumbnail
-  const thumb = data.thumb.startsWith('/i/')
-    ? data.thumb.replace('/i/', '/i/sm/').replace(/\.(jpg|jpeg|png)$/i, '.webp')
-    : `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
+  const thumb =
+    data.thumb && data.thumb.startsWith('/i/')
+      ? data.thumb
+          .replace('/i/', '/i/sm/')
+          .replace(/\.(jpg|jpeg|png)$/i, '.webp')
+      : data.thumb
+        ? `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`
+        : '';
 
   return {
     id,
@@ -45,6 +51,7 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
     thumb,
     date: data.date,
     sortableDate: data.date.split('-').reverse().join('-'),
+    tags: data.tags || [],
   };
 }
 
@@ -75,29 +82,32 @@ export default async function Home() {
   );
 
   return (
-    <div className={styles.container}>
-      <a
-        rel="me"
-        href="https://social.picopod.fm/@jockbaia"
-        tabIndex={-1}
-        aria-hidden="true"
-      ></a>
-      <div className={styles.grid}>
-        {articles.map((article) => (
-          <Link
-            key={article.id}
-            href={`/${article.id}`}
-            className={styles.card}
-          >
-            <img
-              src={article.thumb}
-              alt={article.title}
-              className={styles.thumbnail}
-            />
-            <div className={styles.title}>{article.title}</div>
-            <div className={styles.date}>{article.date}</div>
-          </Link>
-        ))}
+    <div>
+      <Header logo={undefined} />
+      <div className={styles.container}>
+        <a
+          rel="me"
+          href="https://social.picopod.fm/@jockbaia"
+          tabIndex={-1}
+          aria-hidden="true"
+        ></a>
+        <div className={styles.grid}>
+          {articles.map((article) => (
+            <Link
+              key={article.id}
+              href={`/${article.id}`}
+              className={styles.card}
+            >
+              <img
+                src={article.thumb}
+                alt={article.title}
+                className={styles.thumbnail}
+              />
+              <div className={styles.title}>{article.title}</div>
+              <div className={styles.date}>{article.date}</div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

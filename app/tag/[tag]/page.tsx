@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
+import Header from '../../header/Header';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -72,23 +73,26 @@ export default async function TagPage({
   const articles = getArticlesByTag(fileNames, tag);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.grid}>
-        {articles.map((article) => (
-          <Link
-            key={article.id}
-            href={`/${article.id}`}
-            className={styles.card}
-          >
-            <img
-              src={article.thumb}
-              alt={article.title}
-              className={styles.thumbnail}
-            />
-            <div className={styles.title}>{article.title}</div>
-            <div className={styles.date}>{article.date}</div>
-          </Link>
-        ))}
+    <div>
+      <Header logo={undefined} />
+      <div className={styles.container}>
+        <div className={styles.grid}>
+          {articles.map((article) => (
+            <Link
+              key={article.id}
+              href={`/${article.id}`}
+              className={styles.card}
+            >
+              <img
+                src={article.thumb}
+                alt={article.title}
+                className={styles.thumbnail}
+              />
+              <div className={styles.title}>{article.title}</div>
+              <div className={styles.date}>{article.date}</div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
