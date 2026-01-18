@@ -1,7 +1,7 @@
-import eslintPluginPrettier from 'eslint-plugin-prettier';
-import eslintPluginReact from 'eslint-plugin-react';
-import eslintPluginTypeScript from '@typescript-eslint/eslint-plugin';
-import eslintParserTypeScript from '@typescript-eslint/parser';
+const eslintPluginPrettier = require('eslint-plugin-prettier');
+const eslintPluginReact = require('eslint-plugin-react');
+const eslintPluginTypeScript = require('@typescript-eslint/eslint-plugin');
+const eslintParserTypeScript = require('@typescript-eslint/parser');
 
 const config = [
   {
@@ -37,4 +37,4 @@ const config = [
   },
 ];
 
-export default config;
+module.exports = config;
