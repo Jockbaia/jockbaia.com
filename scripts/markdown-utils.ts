@@ -30,7 +30,6 @@ function handleOtherImages(content: string): string {
 }
 
 function handleYouTubeLinks(content: string): string {
-  // Only embed bare YouTube URLs; leave Markdown-style links ([text](url)) alone
   // Only embed bare YouTube URLs that are NOT inside parentheses (so
   // Markdown links like [text](https://...) remain untouched).
   return content.replace(
@@ -117,6 +116,11 @@ function splitParagraphs(content: string): string {
 }
 
 export async function convertMarkdownToHtml(content: string): Promise<string> {
+  // Remove leading whitespace/newlines so a leading blank line doesn't
+  // produce an extra empty paragraph before the first block (e.g. a
+  // blockquote at the top of the post).
+  content = content.replace(/^\s+/, '');
+
   let processedContent = handleImagesWithDescriptions(content);
   processedContent = handleOtherImages(processedContent);
   processedContent = handleYouTubeLinks(processedContent);
