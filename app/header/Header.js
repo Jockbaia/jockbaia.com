@@ -10,10 +10,10 @@ export default function Header({ logo }) {
             <img
               src={
                 logo === 'blog'
-                  ? '/i/sm/header/blog.webp'
+                  ? '/i/header/blog.png'
                   : logo === 'pics'
-                    ? '/i/sm/header/jockbaia.webp'
-                    : '/i/sm/header/jockbaia.webp'
+                    ? '/i/header/pics.png'
+                    : '/i/header/jockbaia.png'
               }
               className="floating"
               alt="Header Logo"

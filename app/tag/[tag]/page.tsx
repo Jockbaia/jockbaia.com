@@ -72,9 +72,15 @@ export default async function TagPage({
   const fileNames = fs.readdirSync(DATA_DIRECTORY);
   const articles = getArticlesByTag(fileNames, tag);
 
+  // Determine logo based on tag
+  let logo;
+  if (tag === 'photography') {
+    logo = 'pics';
+  }
+
   return (
     <div>
-      <Header logo={undefined} />
+      <Header logo={logo} />
       <div className={styles.container}>
         <div className={styles.grid}>
           {articles.map((article) => (
