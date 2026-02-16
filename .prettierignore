@@ -4,3 +4,4 @@ dist/
 public/
 next-env.d.ts
 out/
+data/**/*.md

@@ -13,5 +13,5 @@ excerpt: '"We''ll let you guys prophesy / We gon'' see the future first / Living
 >
 > [♪ Nikes - Frank Ocean](https://www.youtube.com/watch?v=diIFhc_Kzng)
 
-![futura free](/i/frv90f/futura-free.jpg)
-_Futura free. Genoa, 2018._
+![Futura free](/i/frv90f/futura-free.jpg)
+*Futura free. Genoa, 2018.*
