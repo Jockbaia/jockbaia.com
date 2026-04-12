@@ -87,7 +87,7 @@ export default async function Home() {
       <div className={styles.container}>
         <a
           rel="me"
-          href="https://social.picopod.fm/@jockbaia"
+          href="https://pan.rent/@jockbaia"
           tabIndex={-1}
           aria-hidden="true"
         ></a>
