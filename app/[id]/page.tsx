@@ -41,7 +41,7 @@ export async function generateMetadata({ params }) {
         images: mdImage ? [mdImage] : [],
       },
       other: {
-        'fediverse:creator': '@jockbaia@picopod.fm',
+        'fediverse:creator': '@jockbaia@pan.rent',
       },
     };
   } catch (e) {
