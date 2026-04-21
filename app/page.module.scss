@@ -25,9 +25,17 @@
   padding: 10px;
   border-radius: 10px;
   text-align: center;
-  transition: transform 0.2s ease;
+  //transition: transform 0.2s ease;
   color: colors.$white;
   margin-bottom: -20px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card:active {
+  transform: translateY(0);
 }
 
 .date {

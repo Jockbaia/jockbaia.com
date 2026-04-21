@@ -15,7 +15,7 @@ export default function Header({ logo }) {
                     ? '/i/header/pics.png'
                     : '/i/header/jockbaia.png'
               }
-              className="floating"
+              className="header__logo"
               alt="Header Logo"
               width="90"
               height="90"
