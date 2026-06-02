@@ -52,6 +52,7 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
     date: data.date,
     sortableDate: data.date.split('-').reverse().join('-'),
     tags: data.tags || [],
+    hidden: data.hidden || false,
   };
 }
 
@@ -72,9 +73,10 @@ function preprocessMarkdownContent(content: string): string {
 export default async function Home() {
   const fileNames = getMarkdownFileNames(POSTS_DIRECTORY);
 
-  const articles = fileNames.map((fileName) =>
-    parseMarkdownFile(POSTS_DIRECTORY, fileName)
-  );
+  const articles = fileNames
+    .map((fileName) => parseMarkdownFile(POSTS_DIRECTORY, fileName))
+    // If a post is marked as hidden, it won't be shown on the homepage
+    .filter((article) => !article.hidden);
 
   articles.sort(
     (a, b) =>

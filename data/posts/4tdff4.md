@@ -3,6 +3,7 @@ title: "deep breath"
 date: "21-04-2018"
 tags: ["photography"]
 thumb: "/i/4tdff4/deep-breath-t.png"
+hidden: true
 excerpt: "\"So please let's go back to sleep / Don't wake us up from this sweet dream / I feel one day you might find / The lies in my tired eyes\""
 ---
 
