@@ -12,6 +12,15 @@
   color: colors.$gray;
   line-height: 18px;
   margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+.card:hover .title {
+  color: colors.$yellow;
+}
+
+.card:active .title {
+  color: colors.$white;
 }
 
 .grid {
@@ -25,23 +34,24 @@
   padding: 10px;
   border-radius: 10px;
   text-align: center;
-  //transition: transform 0.2s ease;
+  transition: transform 0.1s ease;
   color: colors.$white;
   margin-bottom: -20px;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-}
-
-.card:active {
-  transform: translateY(0);
 }
 
 .date {
   color: colors.$dark-gray;
   font-size: 14px;
   margin-top: -4px;
+  transition: color 0.3s ease;
+}
+
+.card:hover .date {
+  color: rgba(colors.$yellow, 0.6);
+}
+
+.card:active .date {
+  color: rgba(colors.$white, 0.6);
 }
 
 .thumbnail {
