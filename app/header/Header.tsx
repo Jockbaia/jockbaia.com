@@ -16,13 +16,6 @@ function getLogoSrc(logo: string | undefined | null): string {
 function detectLogo(pathname: string): string | undefined {
   if (pathname === '/blog') return 'blog';
   if (pathname.startsWith('/tag/photography')) return 'pics';
-  if (typeof document !== 'undefined') {
-    const el = document.querySelector('[data-logo]');
-    if (el) {
-      const logo = el.getAttribute('data-logo');
-      if (logo) return logo;
-    }
-  }
   return undefined;
 }
 
@@ -32,6 +25,7 @@ export default function Header() {
   const [currentLogo, setCurrentLogo] = useState(() => detectLogo(pathname));
   const [nextLogo, setNextLogo] = useState<string | undefined | null>(null);
   const prevLogo = useRef(currentLogo);
+  const eventReceived = useRef(false);
 
   useEffect(() => {
     const logo = detectLogo(pathname);
@@ -43,15 +37,42 @@ export default function Header() {
 
   useEffect(() => {
     const logo = detectLogo(pathname);
+    eventReceived.current = false;
     if (logo !== prevLogo.current) {
-      setNextLogo(logo);
-      setTimeout(() => {
-        setCurrentLogo(logo);
-        setNextLogo(null);
-      }, 300);
-      prevLogo.current = logo;
+      if (logo) {
+        startTransition(logo);
+      } else {
+        const timer = setTimeout(() => {
+          if (!eventReceived.current) {
+            startTransition(logo);
+          }
+        }, 100);
+        return () => clearTimeout(timer);
+      }
     }
   }, [pathname]);
+
+  useEffect(() => {
+    const handler = (e: CustomEvent) => {
+      const logo = e.detail;
+      eventReceived.current = true;
+      if (logo !== prevLogo.current) {
+        startTransition(logo);
+      }
+    };
+    document.body.addEventListener('pagelogo', handler as EventListener);
+    return () =>
+      document.body.removeEventListener('pagelogo', handler as EventListener);
+  }, []);
+
+  function startTransition(logo: string | undefined) {
+    setNextLogo(logo);
+    setTimeout(() => {
+      setCurrentLogo(logo);
+      setNextLogo(null);
+    }, 300);
+    prevLogo.current = logo;
+  }
 
   return (
     <header className={styles.header}>

@@ -6,6 +6,7 @@ import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
 import { Metadata } from 'next';
+import PageLogo from '../components/PageLogo';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -94,7 +95,7 @@ export default async function Article({
 
   return (
     <div>
-      <div hidden data-logo={hasBlogTag ? 'blog' : hasPicsTag ? 'pics' : ''} />
+      <PageLogo logo={hasBlogTag ? 'blog' : hasPicsTag ? 'pics' : undefined} />
       <div className={styles.container}>
         {/* Title */}
         <div className={styles.title}>{data.title}</div>
