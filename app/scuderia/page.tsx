@@ -3,7 +3,6 @@ import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
 import React from 'react';
-import Header from '../header/Header';
 
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
 
@@ -95,7 +94,6 @@ export default async function ScuderiaPage() {
 
   return (
     <div>
-      <Header logo="Scuderia" />
       <div className={styles.container}>
         <div className={styles.grid}>
           {articles.map((article) => {

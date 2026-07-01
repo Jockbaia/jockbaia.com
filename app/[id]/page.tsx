@@ -6,7 +6,6 @@ import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
 import { Metadata } from 'next';
-import Header from '../header/Header';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -88,13 +87,14 @@ export default async function Article({
   const fullPath = getMarkdownFilePath(id);
   const { data, content } = getMarkdownFileData(fullPath);
   const contentHtml = await convertMarkdownToHtml(content);
+
   const hasBlogTag = Array.isArray(data.tags) && data.tags.includes('blog');
   const hasPicsTag =
     Array.isArray(data.tags) && data.tags.includes('photography');
 
   return (
     <div>
-      <Header logo={hasBlogTag ? 'blog' : hasPicsTag ? 'pics' : undefined} />
+      <div hidden data-logo={hasBlogTag ? 'blog' : hasPicsTag ? 'pics' : ''} />
       <div className={styles.container}>
         {/* Title */}
         <div className={styles.title}>{data.title}</div>

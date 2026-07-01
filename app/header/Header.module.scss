@@ -1,103 +1,151 @@
 @use '../../styles/colors.scss' as colors;
 
+$bg-main: colors.$black;
+$text-main: colors.$white;
+$accent: colors.$yellow;
+$backdrop: rgba(colors.$black, 0.6);
+$border: rgba(colors.$white, 0.1);
+
 .header {
-  & {
-    background-color: colors.$black;
-    width: 100%;
-    color: colors.$white;
-    height: 42px;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-    margin: 50px 0 60px 0;
-    gap: 25px;
-  }
+  background-color: $bg-main;
+  color: $text-main;
+  width: 100%;
+  padding: 10px 20px;
+  margin: 25px 0 40px;
+  min-height: 140px;
+  display: flex;
+  justify-content: center;
 
   &__content {
     max-width: 760px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    position: relative;
   }
 
   &__logo {
-    position: relative;
     cursor: pointer;
+    position: relative;
+    width: 120px;
+    height: 70px;
 
-    &:hover {
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(0);
+    img {
+      width: 120px;
+      height: 70px;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   }
 
-  &__cursor {
-    color: colors.$yellow;
-    font-size: 19px;
-    animation: blink 1s steps(1, start) infinite;
+  @media (max-width: 500px) {
+    margin: 25px 0 25px;
   }
 }
 
-.menu {
+.logo--fade { opacity: 0; transition: opacity 0.3s ease; }
+.logo--enter { opacity: 1; animation: logoFadeIn 0.3s ease; }
+
+@keyframes logoFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hamburger {
+  position: absolute;
+  opacity: 40%;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  z-index: 0;
+
+  span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: $text-main;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  &--open {
+    span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; }
+    span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: $backdrop;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  &--visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: $bg-main;
+  border-left: 1px solid $border;
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  padding: 80px 30px 30px;
+  display: flex;
+  flex-direction: column;
+
+  &--open { transform: translateX(0); }
+
+  &__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: $text-main;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+  }
+
   &__list {
     list-style: none;
     display: flex;
-    gap: 15px;
-    margin: 0;
-    padding: 0;
-  }
-
-  &__list a {
-    color: colors.$yellow;
-    cursor: pointer;
-    text-transform: lowercase;
-    text-align: center;
-    justify-content: center;
-    width: 40px;
-    margin-top: 7px;
-    font-size: 14px;
-    line-height: 15px;
-
-    &:hover {
-      text-decoration: none;
-      filter: invert(0%) sepia(3%) saturate(2%) hue-rotate(288deg) brightness(103%) contrast(101%);
-    }
-  }
-
-  &__item {
-    display: flex;
-    gap: 10px;
     flex-direction: column;
-    align-items: center;
-  }
+    gap: 24px;
 
-  &__item:hover {
-    transform: translateY(-2px) scale(1.00);
-  }
+    li a {
+      color: $accent;
+      text-decoration: none;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: lowercase;
+      transition: opacity 0.2s ease;
 
-  &__item:active {
-    transform: translateY(0) scale(1) rotate(0deg);
-  }
-}
+      &:hover { opacity: 0.7; }
 
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@media (max-width: 500px) {
-  .header {
-    & {
-      margin: 30px 0 110px;
-    }
-
-    &__content {
-      flex-direction: column;
-      gap: 10px;
+      img { width: 30px; height: 30px; }
     }
   }
 }

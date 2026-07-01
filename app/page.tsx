@@ -1,11 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
+
 import styles from './page.module.scss';
 import Link from 'next/link';
-import Header from './header/Header';
 
 const POSTS_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -56,18 +54,6 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
   };
 }
 
-function preprocessMarkdownContent(content: string): string {
-  const processedContent = content.replace(
-    /!\[([^\]]*)\]\((i\/[^\)]+)\)/g,
-    (match, altText, imagePath) => {
-      const absolutePath = `/${imagePath}`;
-      return `![${altText}](${absolutePath})`;
-    }
-  );
-
-  return remark().use(html).processSync(processedContent).toString();
-}
-
 // +++ Home and Article rendering +++
 
 export default async function Home() {
@@ -85,7 +71,6 @@ export default async function Home() {
 
   return (
     <div>
-      <Header logo={undefined} />
       <div className={styles.container}>
         <a
           rel="me"
@@ -111,27 +96,6 @@ export default async function Home() {
           ))}
         </div>
       </div>
-    </div>
-  );
-}
-
-export function Article({ params }: { params: { id: string } }) {
-  const dataDirectory = path.join(process.cwd(), 'data');
-  const fullPath = path.join(dataDirectory, `${params.id}.md`);
-
-  if (!fs.existsSync(fullPath)) {
-    throw new Error(`File not found: ${fullPath}`);
-  }
-
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
-  const processedHtml = preprocessMarkdownContent(content);
-
-  return (
-    <div>
-      <h1>{data.title}</h1>
-      <p>{data.date}</p>
-      <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
     </div>
   );
 }

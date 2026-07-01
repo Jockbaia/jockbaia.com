@@ -20,7 +20,12 @@ body {
   font-family: 'Noto Serif', serif;
   padding: 0;
   margin: 0;
-  // letter-spacing: 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 a {
@@ -34,7 +39,6 @@ a {
 
 img {
   max-width: 100%;
-  height: auto;
 }
 
 em {

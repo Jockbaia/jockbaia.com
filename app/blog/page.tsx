@@ -3,7 +3,6 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
-import Header from '../header/Header';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
@@ -92,7 +91,6 @@ export default function BlogPage() {
 
   return (
     <div>
-      <Header logo={'blog'} />
       <div className={styles.container}>
         <div className={styles.grid}>
           {allEntries.map((article) => (

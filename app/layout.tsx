@@ -1,5 +1,6 @@
 import '../styles/global.scss';
 import Script from 'next/script';
+import Header from './header/Header';
 
 export const metadata = {
   metadataBase: new URL('https://jockbaia.com'),
@@ -24,6 +25,7 @@ export default function RootLayout({
           data-website-id="cd1ed67a-ecc1-49d8-b729-26800993865f"
           strategy="lazyOnload"
         />
+        <Header />
         {children}
       </body>
     </html>

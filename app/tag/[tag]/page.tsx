@@ -3,7 +3,6 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
-import Header from '../../header/Header';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -72,15 +71,8 @@ export default async function TagPage({
   const fileNames = fs.readdirSync(DATA_DIRECTORY);
   const articles = getArticlesByTag(fileNames, tag);
 
-  // Determine logo based on tag
-  let logo;
-  if (tag === 'photography') {
-    logo = 'pics';
-  }
-
   return (
     <div>
-      <Header logo={logo} />
       <div className={styles.container}>
         <div className={styles.grid}>
           {articles.map((article) => (
