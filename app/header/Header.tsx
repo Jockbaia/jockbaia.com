@@ -116,29 +116,19 @@ export default function Header() {
         <nav
           className={`${styles.sidebar} ${sidebarOpen ? styles['sidebar--open'] : ''}`}
         >
-          <button
-            className={styles.sidebar__close}
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
           <ul className={styles.sidebar__list}>
             <li>
               <Link href="/about" onClick={() => setSidebarOpen(false)}>
-                <img src="/i/icons/about.svg" alt="" width="30" height="30" />
                 About
               </Link>
             </li>
             <li>
               <Link href="/blog" onClick={() => setSidebarOpen(false)}>
-                <img src="/i/icons/blog.svg" alt="" width="30" height="30" />
                 Blog
               </Link>
             </li>
             <li>
               <Link href="/tag/music" onClick={() => setSidebarOpen(false)}>
-                <img src="/i/icons/music.svg" alt="" width="30" height="30" />
                 Music
               </Link>
             </li>
@@ -147,12 +137,6 @@ export default function Header() {
                 href="/tag/album-arts"
                 onClick={() => setSidebarOpen(false)}
               >
-                <img
-                  src="/i/icons/album-arts.svg"
-                  alt=""
-                  width="30"
-                  height="30"
-                />
                 Album Arts
               </Link>
             </li>
@@ -161,7 +145,6 @@ export default function Header() {
                 href="/tag/photography"
                 onClick={() => setSidebarOpen(false)}
               >
-                <img src="/i/icons/pics.svg" alt="" width="30" height="30" />
                 Pics
               </Link>
             </li>
