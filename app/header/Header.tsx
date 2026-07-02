@@ -7,10 +7,10 @@ import styles from './Header.module.scss';
 
 function getLogoSrc(logo: string | undefined | null): string {
   return logo === 'blog'
-    ? '/i/header/blog.png'
+    ? '/i/sm/header/blog.webp'
     : logo === 'pics'
-      ? '/i/header/pics.png'
-      : '/i/header/jockbaia.png';
+      ? '/i/sm/header/pics.webp'
+      : '/i/sm/header/jockbaia.webp';
 }
 
 function detectLogo(pathname: string): string | undefined {
