@@ -26,9 +26,9 @@
 }
 
 .container {
-  max-width: 800px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--container-padding);
 }
 
 .content {

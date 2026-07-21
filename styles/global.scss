@@ -57,3 +57,9 @@ figure {
 p {
   margin: 0;
 }
+
+:root {
+  --container-padding: 30px;
+  --container-padding-mobile: 0 30px;
+  --container-max-width: 800px;
+}
