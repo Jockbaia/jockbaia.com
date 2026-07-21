@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 
 import styles from './page.module.scss';
 import Link from 'next/link';
+import { getTagCategory } from './lib/tag-categories';
 
 const POSTS_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -43,6 +44,8 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
         ? `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`
         : '';
 
+  const tagCategory = getTagCategory(data.tags || []);
+
   return {
     id,
     title: data.title,
@@ -51,6 +54,9 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
     sortableDate: data.date.split('-').reverse().join('-'),
     tags: data.tags || [],
     hidden: data.hidden || false,
+    excerpt: data.excerpt,
+    categoryTag: tagCategory?.icon ?? null,
+    categoryTagLabel: tagCategory?.label ?? '',
   };
 }
 
@@ -90,8 +96,13 @@ export default async function Home() {
                 alt={article.title}
                 className={styles.thumbnail}
               />
-              <div className={styles.title}>{article.title}</div>
-              <div className={styles.date}>{article.date}</div>
+              <div className={styles.meta}>
+                <div className={styles.title}>{article.title}</div>
+                <div className={styles.date}>{article.date}</div>
+                {article.categoryTag && (
+                  <span className={styles.tag}>{article.categoryTag}</span>
+                )}
+              </div>
             </Link>
           ))}
         </div>

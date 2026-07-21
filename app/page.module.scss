@@ -13,6 +13,16 @@
   line-height: 18px;
   margin-bottom: 6px;
   transition: color 0.3s ease;
+  text-align: left;
+  padding-right: 20px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  position: relative;
 }
 
 .card:hover .title {
@@ -41,9 +51,10 @@
 
 .date {
   color: colors.$dark-gray;
-  font-size: 14px;
-  margin-top: -4px;
+  margin-top: -8px;
+  font-size: 15px;
   transition: color 0.3s ease;
+  text-align: left;
 }
 
 .card:hover .date {
@@ -61,15 +72,36 @@
   margin-bottom: 10px;
 }
 
+.tag {
+  color: colors.$gray;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: color 0.3s ease;
+}
+
+.card:hover .tag {
+  color: colors.$yellow;
+}
+
+.card:active .tag {
+  color: colors.$white;
+}
+
 .excerpt {
   color: colors.$white;
   margin-top: 14px;
   font-size: 13px;
   line-height: 17px;
+  text-align: justify;
 }
 
 @media (max-width: 810px) {
   .card {
     padding: 25px;
+  }
+
+  .container {
+    padding: 0 20px;
   }
 }

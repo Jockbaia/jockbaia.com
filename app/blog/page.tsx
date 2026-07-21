@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
+import { getTagCategory } from '../lib/tag-categories';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
@@ -39,6 +40,8 @@ function getMostRecentScuderia() {
     sortableDate: date.toISOString(),
     excerpt: `This week's entry of the Scuderia is "${data.title}" by ${artistName}.`,
     isScuderia: true,
+    categoryTag: null,
+    categoryTagLabel: '',
   };
 }
 
@@ -57,6 +60,8 @@ function getArticlesByTag(fileNames: string[], tag: string) {
             .replace(/\.(jpg|jpeg|png)$/i, '.webp')
         : `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
 
+      const tagCategory = getTagCategory(data.tags || []);
+
       return {
         id,
         title: data.title,
@@ -65,6 +70,8 @@ function getArticlesByTag(fileNames: string[], tag: string) {
         sortableDate: data.date.split('-').reverse().join('-'),
         tags: data.tags,
         excerpt: data.excerpt,
+        categoryTag: tagCategory?.icon ?? null,
+        categoryTagLabel: tagCategory?.label ?? '',
       };
     })
     .filter((article) =>
@@ -104,8 +111,13 @@ export default function BlogPage() {
                 alt={article.title}
                 className={styles.thumbnail}
               />
-              <div className={styles.title}>{article.title}</div>
-              <div className={styles.date}>{article.date}</div>
+              <div className={styles.meta}>
+                <div className={styles.title}>{article.title}</div>
+                <div className={styles.date}>{article.date}</div>
+                {article.categoryTag && (
+                  <span className={styles.tag}>{article.categoryTag}</span>
+                )}
+              </div>
               {'excerpt' in article && article.excerpt && (
                 <div className={styles.excerpt}>{article.excerpt}</div>
               )}
