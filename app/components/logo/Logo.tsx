@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-export default function PageLogo({ logo }: { logo?: string }) {
+export default function Logo({ logo }: { logo?: string }) {
   useEffect(() => {
     if (logo) {
       document.body.dispatchEvent(

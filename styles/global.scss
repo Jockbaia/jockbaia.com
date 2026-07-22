@@ -1,17 +1,11 @@
 @use './colors.scss' as colors;
 
 @font-face {
-  font-family: 'Pixel Arial 14';
-  src: url('/fonts/pixel-arial-14.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'Noto Serif';
   src: url('/fonts/noto-serif.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 html,
