@@ -148,6 +148,11 @@ export default function Header() {
                 Pics
               </Link>
             </li>
+            <li>
+              <Link href="/scuderia" onClick={() => setSidebarOpen(false)}>
+                Scuderia
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

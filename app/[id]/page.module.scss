@@ -38,9 +38,10 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+
   blockquote {
-    color: #a1a1a1;
-    border-left: 1px solid #a1a1a1;
+    color: colors.$gray;
+    border-left: 1px solid colors.$gray;
     margin: 0;
     padding: 20px 30px;
     font-style: italic;

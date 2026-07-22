@@ -5,7 +5,6 @@ import styles from './page.module.scss';
 import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
-import { Metadata } from 'next';
 import PageLogo from '../components/PageLogo';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
