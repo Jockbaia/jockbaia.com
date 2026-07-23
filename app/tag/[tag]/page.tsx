@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
 import { getTagCategory } from '../../lib/tag-categories';
+import { getSmImagePath } from '../../scripts/markdown-utils';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -35,14 +36,7 @@ function getArticlesByTag(fileNames: string[], tag: string) {
       const fullPath = path.join(DATA_DIRECTORY, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data } = matter(fileContents);
-
-      // Replace image with thumbnail
-      const thumb = data.thumb.startsWith('/i/')
-        ? data.thumb
-            .replace('/i/', '/i/sm/')
-            .replace(/\.(jpg|jpeg|png)$/i, '.webp')
-        : `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
-
+      const thumb = data.thumb ? getSmImagePath(data.thumb) : '';
       const tagCategory = getTagCategory(data.tags || []);
 
       return {

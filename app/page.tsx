@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import styles from './page.module.scss';
 import Link from 'next/link';
 import { getTagCategory } from './lib/tag-categories';
+import { getSmImagePath } from '../scripts/markdown-utils';
 
 const POSTS_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
@@ -35,14 +36,7 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
   const { data } = matter(fileContents);
 
   // Replace image with thumbnail
-  const thumb =
-    data.thumb && data.thumb.startsWith('/i/')
-      ? data.thumb
-          .replace('/i/', '/i/sm/')
-          .replace(/\.(jpg|jpeg|png)$/i, '.webp')
-      : data.thumb
-        ? `/i/sm/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`
-        : '';
+  const thumb = data.thumb ? getSmImagePath(data.thumb) : '';
 
   const tagCategory = getTagCategory(data.tags || []);
 

@@ -1,6 +1,6 @@
 import '../styles/global.scss';
 import Script from 'next/script';
-import Header from './header/Header';
+import Header from './components/header/Header';
 
 export const metadata = {
   metadataBase: new URL('https://jockbaia.com'),

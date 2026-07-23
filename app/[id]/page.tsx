@@ -4,7 +4,10 @@ import matter from 'gray-matter';
 import styles from './page.module.scss';
 import { Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
-import { convertMarkdownToHtml } from '../../scripts/markdown-utils';
+import {
+  convertMarkdownToHtml,
+  getImagePath,
+} from '../../scripts/markdown-utils';
 import Logo from '../components/logo/Logo';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
@@ -18,26 +21,16 @@ export async function generateMetadata({ params }) {
   try {
     const fullPath = getMarkdownFilePath(id);
     const { data } = getMarkdownFileData(fullPath);
+    const thumb = data.thumb ? getImagePath(data.thumb, 'md') : '';
 
-    // Use M-sized .webp version of the thumbnail
-    let mdImage = '';
-    if (data.thumb) {
-      if (data.thumb.startsWith('/i/')) {
-        mdImage = data.thumb
-          .replace('/i/', '/i/md/')
-          .replace(/\.(jpg|jpeg|png)$/i, '.webp');
-      } else {
-        mdImage = `/i/md/${data.thumb.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
-      }
-    }
     return {
       title: data.title + ' | Jockbaia' || '',
       description: data.excerpt || '',
       openGraph: {
-        images: mdImage ? [mdImage] : [],
+        images: thumb ? [thumb] : [],
       },
       twitter: {
-        images: mdImage ? [mdImage] : [],
+        images: thumb ? [thumb] : [],
       },
       other: {
         'fediverse:creator': '@jockbaia@pan.rent',

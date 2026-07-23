@@ -1,10 +1,21 @@
+export function getImagePath(imagePath: string, size: 'sm' | 'md'): string {
+  const sizePath = `/i/${size}/`;
+  if (imagePath.startsWith('/i/')) {
+    return imagePath
+      .replace('/i/', sizePath)
+      .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+  }
+  return `${sizePath}${imagePath.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
+}
+
+export const getMdImagePath = (path: string) => getImagePath(path, 'md');
+export const getSmImagePath = (path: string) => getImagePath(path, 'sm');
+
 function handleImagesWithDescriptions(content: string): string {
   return content.replace(
     /!\[([^\]]*)\]\((\/i\/[^\)]+)\)\s*\n\*([^\*]+)\*/g,
     (match, altText, imagePath, description) => {
-      const mdImagePath = imagePath
-        .replace('/i/', '/i/md/')
-        .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      const mdImagePath = getMdImagePath(imagePath);
       return `<figure>
                 <a href="${imagePath}" target="_blank" rel="noopener noreferrer">
                   <img src="${mdImagePath}" alt="${altText}" />
@@ -19,9 +30,7 @@ function handleOtherImages(content: string): string {
   return content.replace(
     /!\[([^\]]*)\]\((\/i\/[^\)]+)\)/g,
     (match, altText, imagePath) => {
-      const mdImagePath = imagePath
-        .replace('/i/', '/i/md/')
-        .replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      const mdImagePath = getMdImagePath(imagePath);
       return `<a href="${imagePath}" target="_blank" rel="noopener noreferrer">
                 <img src="${mdImagePath}" alt="${altText}" />
               </a>`;
