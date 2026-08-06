@@ -4,7 +4,7 @@ import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
 import { getTagCategory } from '../../lib/tag-categories';
-import { getSmImagePath } from '../../scripts/markdown-utils';
+import { getSmImagePath } from '../../../scripts/markdown-utils';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
 
