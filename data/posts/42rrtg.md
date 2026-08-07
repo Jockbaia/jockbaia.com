@@ -6,7 +6,7 @@ thumb: "/i/42rrtg/tranquilizer-t.png"
 excerpt: "\"And if there really is a judgement / When He pulls my chart / He'll reject my actions / But He will know my heart\""
 ---
 
-> And if there really is a judgement
+> And if there really is a judgement 
 > When He pulls my chart
 > He'll reject my actions
 > But He will know my heart
