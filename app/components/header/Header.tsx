@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import styles from './Header.module.scss';
+import type { ScuderiaArticle } from '../../lib/scuderia';
 
 function getLogoSrc(logo: string | undefined | null): string {
   return logo === 'blog'
@@ -19,7 +20,11 @@ function detectLogo(pathname: string): string | undefined {
   return undefined;
 }
 
-export default function Header() {
+interface HeaderProps {
+  latestScuderia?: ScuderiaArticle | null;
+}
+
+export default function Header({ latestScuderia }: HeaderProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(() => detectLogo(pathname));
@@ -148,12 +153,49 @@ export default function Header() {
                 Pics
               </Link>
             </li>
-            <li>
-              <Link href="/scuderia" onClick={() => setSidebarOpen(false)}>
-                Scuderia
-              </Link>
-            </li>
           </ul>
+          {latestScuderia && (
+            <Link
+              href="/scuderia"
+              className={styles.nowListening}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <span className={styles.nowListening__label}>
+                now listening
+                <svg
+                  className={styles.nowListening__music}
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 18V5l12-2v13" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg>
+              </span>
+              <div className={styles.nowListening__card}>
+                <div className={styles.nowListening__info}>
+                  <span className={styles.nowListening__title}>
+                    {latestScuderia.title}
+                  </span>
+                  <span className={styles.nowListening__artist}>
+                    {latestScuderia.artist?.join(', ')}
+                  </span>
+                </div>
+                <img
+                  src={latestScuderia.thumb}
+                  alt={latestScuderia.title}
+                  className={styles.nowListening__thumb}
+                  width="48"
+                  height="48"
+                />
+              </div>
+            </Link>
+          )}
         </nav>
       </div>
     </header>

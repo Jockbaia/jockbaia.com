@@ -1,6 +1,7 @@
 import '../styles/global.scss';
 import Script from 'next/script';
 import Header from './components/header/Header';
+import { getLatestScuderiaArticle } from './lib/scuderia';
 
 export const metadata = {
   metadataBase: new URL('https://jockbaia.com'),
@@ -17,6 +18,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const latestScuderia = getLatestScuderiaArticle();
+
   return (
     <html lang="en">
       <body>
@@ -25,7 +28,7 @@ export default function RootLayout({
           data-website-id="cd1ed67a-ecc1-49d8-b729-26800993865f"
           strategy="lazyOnload"
         />
-        <Header />
+        <Header latestScuderia={latestScuderia} />
         {children}
       </body>
     </html>

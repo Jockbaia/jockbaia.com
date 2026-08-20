@@ -174,3 +174,71 @@ $border: rgba(colors.$white, 0.1);
     }
   }
 }
+
+.nowListening {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  text-decoration: none;
+
+  &__label {
+    color: colors.$gray;
+    font-size: 11px;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__card {
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__music {
+    width: 13px;
+    height: 13px;
+    color: colors.$yellow;
+    flex-shrink: 0;
+  }
+
+  &__thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    text-align: right;
+    overflow: hidden;
+  }
+
+  &__title {
+    color: colors.$yellow;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__artist {
+    color: colors.$gray;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
