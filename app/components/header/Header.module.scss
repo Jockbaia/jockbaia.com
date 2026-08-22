@@ -143,6 +143,7 @@ $border: rgba(colors.$white, 0.1);
   padding: 80px 30px 30px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   &--open {
     transform: translateX(0);
@@ -176,11 +177,10 @@ $border: rgba(colors.$white, 0.1);
 }
 
 .nowListening {
-  margin-top: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 3px;
   text-decoration: none;
 
   &__label {
