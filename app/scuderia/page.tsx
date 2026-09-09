@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
 import React from 'react';
+import { Calendar, User, Disc, Tag } from 'lucide-react';
 
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
 
@@ -101,10 +102,7 @@ export default async function ScuderiaPage() {
             return (
               <React.Fragment key={article.id}>
                 <div className={styles.track__wrapper} key={article.id}>
-                  <div className={styles.article__meta}>
-                    {formattedDate && (
-                      <div className={styles.track__date}>{formattedDate}</div>
-                    )}
+                  <div className={styles.track__header}>
                     <div style={{ position: 'relative' }}>
                       {article.thumb && (
                         <img
@@ -124,31 +122,41 @@ export default async function ScuderiaPage() {
                         </a>
                       )}
                     </div>
+                    <div className={styles.track__info}>
+                      <div className={styles.track__info__top}>
+                        <div>
+                          <div className={styles.track__title}>{article.title}</div>
+                          <div className={styles.track__artist}>
+                            <User size={14} />
+                            {article.artist?.join(', ')}
+                          </div>
+                        </div>
+                        {formattedDate && (
+                          <div className={styles.track__date}>
+                            <Calendar size={14} />
+                            {formattedDate}
+                          </div>
+                        )}
+                      </div>
+                      <div className={styles.track__album}>
+                        <Disc size={14} />
+                        {article.album
+                          ? `${article.album} (${new Date(article.formattedDate).getFullYear()})`
+                          : `Single (${new Date(article.formattedDate).getFullYear()})`
+                        }
+                      </div>
+                    </div>
                   </div>
-                  <div className={styles.article__content}>
-                    <div className={styles.track__title}>{article.title}</div>
-                    <div className={styles.track__artist}>
-                      {article.artist?.join(', ')}
-                    </div>
-                    {article.album && (
-                      <div className={styles.track__album}>
-                        From the {new Date(article.formattedDate).getFullYear()}{' '}
-                        album "{article.album}"
-                      </div>
-                    )}
-                    {!article.album && (
-                      <div className={styles.track__album}>
-                        Released in{' '}
-                        {new Date(article.formattedDate).getFullYear()} as a
-                        single
-                      </div>
-                    )}
-                    <div className={styles.track__content}>
-                      {article.content}
-                    </div>
-                    <div className={styles.track__genres}>
-                      {article.genres?.join(', ')}
-                    </div>
+                  <div className={styles.track__content}>
+                    {article.content}
+                  </div>
+                  <div className={styles.track__genres}>
+                    {article.genres?.map((genre) => (
+                      <span key={genre} className={styles.track__genre}>
+                        <Tag size={10} />
+                        {genre}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </React.Fragment>
