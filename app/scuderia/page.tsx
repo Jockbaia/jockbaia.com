@@ -125,7 +125,9 @@ export default async function ScuderiaPage() {
                     <div className={styles.track__info}>
                       <div className={styles.track__info__top}>
                         <div>
-                          <div className={styles.track__title}>{article.title}</div>
+                          <div className={styles.track__title}>
+                            {article.title}
+                          </div>
                           <div className={styles.track__artist}>
                             <User size={14} />
                             {article.artist?.join(', ')}
@@ -142,14 +144,11 @@ export default async function ScuderiaPage() {
                         <Disc size={14} />
                         {article.album
                           ? `${article.album} (${new Date(article.formattedDate).getFullYear()})`
-                          : `Single (${new Date(article.formattedDate).getFullYear()})`
-                        }
+                          : `Single (${new Date(article.formattedDate).getFullYear()})`}
                       </div>
                     </div>
                   </div>
-                  <div className={styles.track__content}>
-                    {article.content}
-                  </div>
+                  <div className={styles.track__content}>{article.content}</div>
                   <div className={styles.track__genres}>
                     {article.genres?.map((genre) => (
                       <span key={genre} className={styles.track__genre}>
