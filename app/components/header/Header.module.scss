@@ -144,6 +144,7 @@ $border: rgba(colors.$white, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
 
   &--open {
     transform: translateX(0);
@@ -154,6 +155,8 @@ $border: rgba(colors.$white, 0.1);
     display: flex;
     flex-direction: column;
     gap: 10px;
+    min-height: 0;
+    flex-shrink: 1;
 
     li a {
       color: $accent;
@@ -182,6 +185,7 @@ $border: rgba(colors.$white, 0.1);
   align-items: flex-end;
   gap: 3px;
   text-decoration: none;
+  flex-shrink: 0;
 
   &__label {
     color: colors.$gray;
