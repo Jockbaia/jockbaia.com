@@ -136,6 +136,7 @@ $border: rgba(colors.$white, 0.1);
   right: 0;
   width: 260px;
   height: 100vh;
+  height: 100dvh;
   background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 90%, $bg-main 100%);
   z-index: 1000;
   transform: translateX(100%);
