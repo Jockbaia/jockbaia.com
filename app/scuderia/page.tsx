@@ -103,7 +103,7 @@ export default async function ScuderiaPage() {
               <React.Fragment key={article.id}>
                 <div className={styles.track__wrapper} key={article.id}>
                   <div className={styles.track__header}>
-                    <div style={{ position: 'relative' }}>
+                    <div className={styles.track__thumbWrap}>
                       {article.thumb && (
                         <img
                           src={article.thumb}
