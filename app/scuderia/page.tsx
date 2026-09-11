@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
 import React from 'react';
-import { Calendar, User, Disc, Tag } from 'lucide-react';
+import { Calendar, User, Disc, Music, Tag } from 'lucide-react';
 
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'content', 'scuderia');
 
@@ -142,10 +142,17 @@ export default async function ScuderiaPage() {
                         )}
                       </div>
                       <div className={styles.track__album}>
-                        <Disc size={14} />
-                        {article.album
-                          ? `${article.album} (${new Date(article.formattedDate).getFullYear()})`
-                          : `Single (${new Date(article.formattedDate).getFullYear()})`}
+                        {article.album ? (
+                          <>
+                            <Disc size={14} />
+                            {article.album} ({new Date(article.formattedDate).getFullYear()})
+                          </>
+                        ) : (
+                          <>
+                            <Music size={14} />
+                            Released as a single in {new Date(article.formattedDate).getFullYear()}
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
