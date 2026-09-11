@@ -16,6 +16,11 @@
 # thumbnails
 /public/i/md
 /public/i/sm
+/public/assets/md
+/public/assets/sm
+
+## symlinks to content/posts/ (created by compress-thumbnails)
+/public/i/[0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z]
 
 # sitemaps
 /public/sitemap.xml

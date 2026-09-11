@@ -10,7 +10,7 @@ import {
 } from '../../scripts/markdown-utils';
 import Logo from '../components/logo/Logo';
 
-const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 
 // +++ Metadata handling +++
 
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   try {
     const fullPath = getMarkdownFilePath(id);
     const { data } = getMarkdownFileData(fullPath);
-    const thumb = data.thumb ? getImagePath(data.thumb, 'md') : '';
+    const thumb = data.thumb ? getImagePath(data.thumb, 'md', id) : '';
 
     return {
       title: data.title + ' | Jockbaia' || '',
@@ -47,18 +47,22 @@ export async function generateMetadata({ params }) {
 // +++ Markdown handling +++
 
 export async function generateStaticParams() {
-  const fileNames = getMarkdownFileNames();
-  return fileNames.map((fileName) => ({
-    id: fileName.replace(/\.md$/, ''),
+  const entries = getDirectoryEntries();
+  return entries.map((entry) => ({
+    id: entry,
   }));
 }
 
-function getMarkdownFileNames() {
-  return fs.readdirSync(DATA_DIRECTORY);
+function getDirectoryEntries() {
+  return fs
+    .readdirSync(DATA_DIRECTORY)
+    .filter((entry) =>
+      fs.statSync(path.join(DATA_DIRECTORY, entry)).isDirectory()
+    );
 }
 
 function getMarkdownFilePath(id: string) {
-  return path.join(DATA_DIRECTORY, `${id}.md`);
+  return path.join(DATA_DIRECTORY, id, `${id}.md`);
 }
 
 function getMarkdownFileData(fullPath: string) {
@@ -79,7 +83,7 @@ export default async function Article({
   const { id } = await params;
   const fullPath = getMarkdownFilePath(id);
   const { data, content } = getMarkdownFileData(fullPath);
-  const contentHtml = await convertMarkdownToHtml(content);
+  const contentHtml = await convertMarkdownToHtml(content, id);
 
   const hasBlogTag = Array.isArray(data.tags) && data.tags.includes('blog');
   const hasPicsTag =

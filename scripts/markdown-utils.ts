@@ -1,23 +1,45 @@
-export function getImagePath(imagePath: string, size: 'sm' | 'md'): string {
-  const sizePath = `/i/${size}/`;
+export function getImagePath(
+  imagePath: string,
+  size: 'sm' | 'md',
+  postId?: string
+): string {
   if (imagePath.startsWith('/i/')) {
     return imagePath
-      .replace('/i/', sizePath)
+      .replace('/i/', `/i/${size}/`)
       .replace(/\.(jpg|jpeg|png)$/i, '.webp');
   }
-  return `${sizePath}${imagePath.replace(/^i\//, '').replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
+  if (postId) {
+    return `/i/${size}/${postId}/${imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
+  }
+  return `/i/${size}/${imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
 }
 
-export const getMdImagePath = (path: string) => getImagePath(path, 'md');
-export const getSmImagePath = (path: string) => getImagePath(path, 'sm');
+export const getMdImagePath = (path: string, postId?: string) =>
+  getImagePath(path, 'md', postId);
+export const getSmImagePath = (path: string, postId?: string) =>
+  getImagePath(path, 'sm', postId);
 
-function handleImagesWithDescriptions(content: string): string {
+function resolveImagePath(imagePath: string, postId?: string): string {
+  if (imagePath.startsWith('/i/') || imagePath.startsWith('http')) {
+    return imagePath;
+  }
+  if (postId) {
+    return `/i/${postId}/${imagePath}`;
+  }
+  return imagePath;
+}
+
+function handleImagesWithDescriptions(
+  content: string,
+  postId?: string
+): string {
   return content.replace(
-    /!\[([^\]]*)\]\((\/i\/[^\)]+)\)\s*\n\*([^\*]+)\*/g,
+    /!\[([^\]]*)\]\(([^\)]+)\)\s*\n\*([^\*]+)\*/g,
     (match, altText, imagePath, description) => {
-      const mdImagePath = getMdImagePath(imagePath);
+      const resolved = resolveImagePath(imagePath, postId);
+      const mdImagePath = getMdImagePath(resolved);
       return `<figure>
-                <a href="${imagePath}" target="_blank" rel="noopener noreferrer">
+                <a href="${resolved}" target="_blank" rel="noopener noreferrer">
                   <img src="${mdImagePath}" alt="${altText}" />
                 </a>
                 <figcaption><em>${description.trim()}</em></figcaption>
@@ -26,12 +48,13 @@ function handleImagesWithDescriptions(content: string): string {
   );
 }
 
-function handleOtherImages(content: string): string {
+function handleOtherImages(content: string, postId?: string): string {
   return content.replace(
-    /!\[([^\]]*)\]\((\/i\/[^\)]+)\)/g,
+    /!\[([^\]]*)\]\(([^\)]+)\)/g,
     (match, altText, imagePath) => {
-      const mdImagePath = getMdImagePath(imagePath);
-      return `<a href="${imagePath}" target="_blank" rel="noopener noreferrer">
+      const resolved = resolveImagePath(imagePath, postId);
+      const mdImagePath = getMdImagePath(resolved);
+      return `<a href="${resolved}" target="_blank" rel="noopener noreferrer">
                 <img src="${mdImagePath}" alt="${altText}" />
               </a>`;
     }
@@ -39,8 +62,6 @@ function handleOtherImages(content: string): string {
 }
 
 function handleYouTubeLinks(content: string): string {
-  // Only embed bare YouTube URLs that are NOT inside parentheses (so
-  // Markdown links like [text](https://...) remain untouched).
   return content.replace(
     /(?<!\()https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g,
     (match, videoId) => {
@@ -78,8 +99,6 @@ function splitParagraphs(content: string): string {
       continue;
     }
 
-    // Group adjacent blockquote blocks so blank lines inside quotes
-    // become paragraph breaks within the same <blockquote>.
     if (trimmed.startsWith('>')) {
       const quoteBlocks: string[] = [];
       let j = i;
@@ -100,7 +119,6 @@ function splitParagraphs(content: string): string {
             paraHtml.push(`<p>${currLines.join('<br/>')}</p>`);
             currLines = [];
           }
-          // represent an explicit blank paragraph between quoted paragraphs
           paraHtml.push('<p>&nbsp;</p>');
         } else {
           currLines.push(line.trim());
@@ -124,14 +142,14 @@ function splitParagraphs(content: string): string {
   return html;
 }
 
-export async function convertMarkdownToHtml(content: string): Promise<string> {
-  // Remove leading whitespace/newlines so a leading blank line doesn't
-  // produce an extra empty paragraph before the first block (e.g. a
-  // blockquote at the top of the post).
+export async function convertMarkdownToHtml(
+  content: string,
+  postId?: string
+): Promise<string> {
   content = content.replace(/^\s+/, '');
 
-  let processedContent = handleImagesWithDescriptions(content);
-  processedContent = handleOtherImages(processedContent);
+  let processedContent = handleImagesWithDescriptions(content, postId);
+  processedContent = handleOtherImages(processedContent, postId);
   processedContent = handleYouTubeLinks(processedContent);
   processedContent = handleLinks(processedContent);
   return splitParagraphs(processedContent);

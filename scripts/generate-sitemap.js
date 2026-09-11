@@ -2,18 +2,21 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 const SITE_URL = 'https://jockbaia.com';
 
-function getMarkdownFileNames() {
+function getDirectoryEntries() {
   if (!fs.existsSync(DATA_DIRECTORY)) return [];
-  return fs.readdirSync(DATA_DIRECTORY).filter((file) => file.endsWith('.md'));
+  return fs
+    .readdirSync(DATA_DIRECTORY)
+    .filter((entry) =>
+      fs.statSync(path.join(DATA_DIRECTORY, entry)).isDirectory()
+    );
 }
 
 function getAllUrls() {
-  const fileNames = getMarkdownFileNames();
-  const postUrls = fileNames.map((fileName) => {
-    const id = fileName.replace(/\.md$/, '');
+  const entries = getDirectoryEntries();
+  const postUrls = entries.map((id) => {
     return `${SITE_URL}/${id}`;
   });
   const staticUrls = [SITE_URL, `${SITE_URL}/blog`, `${SITE_URL}/scuderia`];

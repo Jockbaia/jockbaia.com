@@ -6,20 +6,28 @@ import styles from './page.module.scss';
 import { getTagCategory } from '../../lib/tag-categories';
 import { getSmImagePath } from '../../../scripts/markdown-utils';
 
-const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 
 // +++ Tag handling +++
 
+function getDirectoryEntries() {
+  return fs
+    .readdirSync(DATA_DIRECTORY)
+    .filter((entry) =>
+      fs.statSync(path.join(DATA_DIRECTORY, entry)).isDirectory()
+    );
+}
+
 export async function generateStaticParams() {
-  const fileNames = fs.readdirSync(DATA_DIRECTORY);
-  const tags = getAllTags(fileNames);
+  const entries = getDirectoryEntries();
+  const tags = getAllTags(entries);
   return Array.from(tags).map((tag) => ({ tag }));
 }
 
-function getAllTags(fileNames: string[]): Set<string> {
+function getAllTags(entries: string[]): Set<string> {
   const tags = new Set<string>();
-  fileNames.forEach((fileName) => {
-    const fullPath = path.join(DATA_DIRECTORY, fileName);
+  entries.forEach((id) => {
+    const fullPath = path.join(DATA_DIRECTORY, id, `${id}.md`);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data } = matter(fileContents);
     data.tags.forEach((tag) =>
@@ -29,14 +37,13 @@ function getAllTags(fileNames: string[]): Set<string> {
   return tags;
 }
 
-function getArticlesByTag(fileNames: string[], tag: string) {
-  return fileNames
-    .map((fileName) => {
-      const id = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(DATA_DIRECTORY, fileName);
+function getArticlesByTag(entries: string[], tag: string) {
+  return entries
+    .map((id) => {
+      const fullPath = path.join(DATA_DIRECTORY, id, `${id}.md`);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data } = matter(fileContents);
-      const thumb = data.thumb ? getSmImagePath(data.thumb) : '';
+      const thumb = data.thumb ? getSmImagePath(data.thumb, id) : '';
       const tagCategory = getTagCategory(data.tags || []);
 
       return {
@@ -68,8 +75,8 @@ export default async function TagPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
-  const fileNames = fs.readdirSync(DATA_DIRECTORY);
-  const articles = getArticlesByTag(fileNames, tag);
+  const entries = getDirectoryEntries();
+  const articles = getArticlesByTag(entries, tag);
 
   return (
     <div>

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
+const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'content', 'scuderia');
 
 export interface ScuderiaArticle {
   id: string;
@@ -13,25 +13,24 @@ export interface ScuderiaArticle {
 }
 
 export function getLatestScuderiaArticle(): ScuderiaArticle | null {
-  const files = fs
+  const entries = fs
     .readdirSync(SCUDERIA_DIRECTORY)
-    .filter(
-      (file) =>
-        fs.statSync(path.join(SCUDERIA_DIRECTORY, file)).isFile() &&
-        file.endsWith('.md')
+    .filter((entry) =>
+      fs.statSync(path.join(SCUDERIA_DIRECTORY, entry)).isDirectory()
     );
 
-  if (files.length === 0) return null;
+  if (entries.length === 0) return null;
 
-  const latestFile = files
-    .filter((file) => /^\d{6}/.test(file))
+  const latestEntry = entries
+    .filter((entry) => /^\d{6}/.test(entry))
     .sort((a, b) => b.slice(0, 6).localeCompare(a.slice(0, 6)))[0];
 
-  if (!latestFile) return null;
+  if (!latestEntry) return null;
 
-  const id = latestFile.replace(/\.md$/, '');
-  const fullPath = path.join(SCUDERIA_DIRECTORY, latestFile);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const id = latestEntry;
+  const dirPath = path.join(SCUDERIA_DIRECTORY, id);
+  const mdPath = path.join(dirPath, `${id}.md`);
+  const fileContents = fs.readFileSync(mdPath, 'utf8');
   const { data } = matter(fileContents);
 
   return {

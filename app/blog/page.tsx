@@ -6,18 +6,17 @@ import styles from './page.module.scss';
 import { getTagCategory } from '../lib/tag-categories';
 import { getSmImagePath } from '../../scripts/markdown-utils';
 
-const DATA_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 
-function getArticlesByTag(fileNames: string[], tag: string) {
-  return fileNames
-    .map((fileName) => {
-      const id = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(DATA_DIRECTORY, fileName);
+function getArticlesByTag(dirNames: string[], tag: string) {
+  return dirNames
+    .map((id) => {
+      const fullPath = path.join(DATA_DIRECTORY, id, `${id}.md`);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data } = matter(fileContents);
 
       // Replace image with thumbnail
-      const thumb = data.thumb ? getSmImagePath(data.thumb) : '';
+      const thumb = data.thumb ? getSmImagePath(data.thumb, id) : '';
 
       const tagCategory = getTagCategory(data.tags || []);
 
@@ -43,8 +42,12 @@ function getArticlesByTag(fileNames: string[], tag: string) {
 }
 
 export default function BlogPage() {
-  const fileNames = fs.readdirSync(DATA_DIRECTORY);
-  const articles = getArticlesByTag(fileNames, 'blog');
+  const dirNames = fs
+    .readdirSync(DATA_DIRECTORY)
+    .filter((entry) =>
+      fs.statSync(path.join(DATA_DIRECTORY, entry)).isDirectory()
+    );
+  const articles = getArticlesByTag(dirNames, 'blog');
 
   return (
     <div>

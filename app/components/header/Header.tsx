@@ -8,10 +8,10 @@ import type { ScuderiaArticle } from '../../lib/scuderia';
 
 function getLogoSrc(logo: string | undefined | null): string {
   return logo === 'blog'
-    ? '/i/sm/header/blog.webp'
+    ? '/assets/sm/header/blog.webp'
     : logo === 'pics'
-      ? '/i/sm/header/pics.webp'
-      : '/i/sm/header/jockbaia.webp';
+      ? '/assets/sm/header/pics.webp'
+      : '/assets/sm/header/jockbaia.webp';
 }
 
 function detectLogo(pathname: string): string | undefined {

@@ -7,36 +7,33 @@ import Link from 'next/link';
 import { getTagCategory } from './lib/tag-categories';
 import { getSmImagePath } from '../scripts/markdown-utils';
 
-const POSTS_DIRECTORY = path.join(process.cwd(), 'data', 'posts');
+const POSTS_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 
 // +++ Markdown handling +++
 
-function getMarkdownFileNames(postsDirectory: string): string[] {
+function getDirectoryEntries(postsDirectory: string): string[] {
   return fs
     .readdirSync(postsDirectory)
-    .filter(
-      (file) =>
-        fs.statSync(path.join(postsDirectory, file)).isFile() &&
-        file.endsWith('.md')
+    .filter((entry) =>
+      fs.statSync(path.join(postsDirectory, entry)).isDirectory()
     );
 }
 
 export async function generateStaticParams() {
-  const fileNames = getMarkdownFileNames(POSTS_DIRECTORY);
+  const entries = getDirectoryEntries(POSTS_DIRECTORY);
 
-  return fileNames.map((fileName) => ({
-    id: fileName.replace(/\.md$/, ''),
+  return entries.map((entry) => ({
+    id: entry,
   }));
 }
 
-function parseMarkdownFile(dataDirectory: string, fileName: string) {
-  const id = fileName.replace(/\.md$/, '');
-  const fullPath = path.join(dataDirectory, fileName);
+function parseMarkdownFile(dataDirectory: string, id: string) {
+  const fullPath = path.join(dataDirectory, id, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data } = matter(fileContents);
 
   // Replace image with thumbnail
-  const thumb = data.thumb ? getSmImagePath(data.thumb) : '';
+  const thumb = data.thumb ? getSmImagePath(data.thumb, id) : '';
 
   const tagCategory = getTagCategory(data.tags || []);
 
@@ -57,10 +54,10 @@ function parseMarkdownFile(dataDirectory: string, fileName: string) {
 // +++ Home and Article rendering +++
 
 export default async function Home() {
-  const fileNames = getMarkdownFileNames(POSTS_DIRECTORY);
+  const entries = getDirectoryEntries(POSTS_DIRECTORY);
 
-  const articles = fileNames
-    .map((fileName) => parseMarkdownFile(POSTS_DIRECTORY, fileName))
+  const articles = entries
+    .map((id) => parseMarkdownFile(POSTS_DIRECTORY, id))
     // If a post is marked as hidden, it won't be shown on the homepage
     .filter((article) => !article.hidden);
 

@@ -5,30 +5,32 @@ import styles from './page.module.scss';
 import React from 'react';
 import { Calendar, User, Disc, Tag } from 'lucide-react';
 
-const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'data', 'scuderia');
+const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'content', 'scuderia');
 
 // +++ Data handling / utilities +++
 
 export async function generateStaticParams() {
-  const fileNames = fs.readdirSync(SCUDERIA_DIRECTORY);
-  return fileNames.map((fileName) => ({ id: fileName.replace(/\.md$/, '') }));
+  const entries = fs.readdirSync(SCUDERIA_DIRECTORY);
+  return entries
+    .filter((entry) =>
+      fs.statSync(path.join(SCUDERIA_DIRECTORY, entry)).isDirectory()
+    )
+    .map((entry) => ({ id: entry }));
 }
 
-function getMarkdownFiles() {
+function getArticleDirs() {
   return fs
     .readdirSync(SCUDERIA_DIRECTORY)
-    .filter(
-      (file) =>
-        fs.statSync(path.join(SCUDERIA_DIRECTORY, file)).isFile() &&
-        file.endsWith('.md')
+    .filter((entry) =>
+      fs.statSync(path.join(SCUDERIA_DIRECTORY, entry)).isDirectory()
     );
 }
 
-function getArticles(fileNames: string[]) {
-  return fileNames
-    .map((fileName) => {
-      const id = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(SCUDERIA_DIRECTORY, fileName);
+function getArticles(dirNames: string[]) {
+  return dirNames
+    .map((id) => {
+      const dirPath = path.join(SCUDERIA_DIRECTORY, id);
+      const fullPath = path.join(dirPath, `${id}.md`);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data, content } = matter(fileContents);
       const thumb = `/i/sm/scuderia/${id}.webp`;
@@ -90,8 +92,7 @@ function extractDateFromFileName(fileName) {
 // +++ Page list rendering +++
 
 export default async function ScuderiaPage() {
-  const fileNames = fs.readdirSync(SCUDERIA_DIRECTORY);
-  const articles = getArticles(getMarkdownFiles());
+  const articles = getArticles(getArticleDirs());
 
   return (
     <div>
