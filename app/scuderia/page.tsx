@@ -145,12 +145,14 @@ export default async function ScuderiaPage() {
                         {article.album ? (
                           <>
                             <Disc size={14} />
-                            {article.album} ({new Date(article.formattedDate).getFullYear()})
+                            {article.album} (
+                            {new Date(article.formattedDate).getFullYear()})
                           </>
                         ) : (
                           <>
                             <Music size={14} />
-                            Released as a single in {new Date(article.formattedDate).getFullYear()}
+                            Released as a single in{' '}
+                            {new Date(article.formattedDate).getFullYear()}
                           </>
                         )}
                       </div>
