@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
 import React from 'react';
-import { Calendar, User, Disc, Music, Tag } from 'lucide-react';
+import ScuderiaTrack from '../components/scuderia-track/ScuderiaTrack';
 
 const SCUDERIA_DIRECTORY = path.join(process.cwd(), 'content', 'scuderia');
 
@@ -99,76 +99,13 @@ export default async function ScuderiaPage() {
       <div className={styles.container}>
         <div className={styles.grid}>
           {articles.map((article) => {
-            const formattedDate = extractDateFromFileName(article.id);
+            const displayDate = extractDateFromFileName(article.id);
             return (
-              <React.Fragment key={article.id}>
-                <div className={styles.track__wrapper} key={article.id}>
-                  <div className={styles.track__header}>
-                    <div className={styles.track__thumbWrap}>
-                      {article.thumb && (
-                        <img
-                          src={article.thumb}
-                          alt={article.title}
-                          className={styles.track__thumbnail}
-                        />
-                      )}
-                      {article.youtube && (
-                        <a
-                          href={article.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.track__youtube}
-                        >
-                          ▶︎
-                        </a>
-                      )}
-                    </div>
-                    <div className={styles.track__info}>
-                      <div className={styles.track__info__top}>
-                        <div>
-                          <div className={styles.track__title}>
-                            {article.title}
-                          </div>
-                          <div className={styles.track__artist}>
-                            <User size={14} />
-                            {article.artist?.join(', ')}
-                          </div>
-                        </div>
-                        {formattedDate && (
-                          <div className={styles.track__date}>
-                            <Calendar size={14} />
-                            {formattedDate}
-                          </div>
-                        )}
-                      </div>
-                      <div className={styles.track__album}>
-                        {article.album ? (
-                          <>
-                            <Disc size={14} />
-                            {article.album} (
-                            {new Date(article.formattedDate).getFullYear()})
-                          </>
-                        ) : (
-                          <>
-                            <Music size={14} />
-                            Released as a single in{' '}
-                            {new Date(article.formattedDate).getFullYear()}
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.track__content}>{article.content}</div>
-                  <div className={styles.track__genres}>
-                    {article.genres?.map((genre) => (
-                      <span key={genre} className={styles.track__genre}>
-                        <Tag size={10} />
-                        {genre}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </React.Fragment>
+              <ScuderiaTrack
+                key={article.id}
+                article={article}
+                displayDate={displayDate}
+              />
             );
           })}
         </div>

@@ -2,6 +2,8 @@ import '../styles/global.scss';
 import Script from 'next/script';
 import Header from './components/header/Header';
 import { getLatestScuderiaArticle } from './lib/scuderia';
+import { PlayerProvider } from './components/player/PlayerContext';
+import StickyPlayer from './components/player/StickyPlayer';
 
 export const metadata = {
   metadataBase: new URL('https://jockbaia.com'),
@@ -23,13 +25,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Script
-          src="https://stats.picopod.fm/script.js"
-          data-website-id="cd1ed67a-ecc1-49d8-b729-26800993865f"
-          strategy="lazyOnload"
-        />
-        <Header latestScuderia={latestScuderia} />
-        {children}
+        <PlayerProvider>
+          <Script
+            src="https://stats.picopod.fm/script.js"
+            data-website-id="cd1ed67a-ecc1-49d8-b729-26800993865f"
+            strategy="lazyOnload"
+          />
+          <Header latestScuderia={latestScuderia} />
+          {children}
+          <StickyPlayer />
+        </PlayerProvider>
       </body>
     </html>
   );
