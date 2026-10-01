@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "build": "npm run compress-thumbnails && next build",
+    "build": "npm run compress-thumbnails && npm run generate-radio-manifest && next build",
     "postbuild": "node scripts/generate-sitemap.js",
     "compress-thumbnails": "node scripts/compress-thumbnails.js",
-    "dev": "npm run compress-thumbnails && next dev",
+    "generate-radio-manifest": "node scripts/generate-radio-manifest.js",
+    "dev": "npm run generate-radio-manifest && npm run compress-thumbnails && next dev",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
