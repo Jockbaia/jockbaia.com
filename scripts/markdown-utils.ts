@@ -19,14 +19,18 @@ export const getMdImagePath = (path: string, postId?: string) =>
 export const getSmImagePath = (path: string, postId?: string) =>
   getImagePath(path, 'sm', postId);
 
-function resolveImagePath(imagePath: string, postId?: string): string {
-  if (imagePath.startsWith('/i/') || imagePath.startsWith('http')) {
-    return imagePath;
+function resolveMediaPath(mediaPath: string, postId?: string): string {
+  if (mediaPath.startsWith('/i/') || mediaPath.startsWith('http')) {
+    return mediaPath;
   }
   if (postId) {
-    return `/i/${postId}/${imagePath}`;
+    return `/i/${postId}/${mediaPath}`;
   }
-  return imagePath;
+  return mediaPath;
+}
+
+function resolveImagePath(imagePath: string, postId?: string): string {
+  return resolveMediaPath(imagePath, postId);
 }
 
 function handleImagesWithDescriptions(
@@ -65,14 +69,30 @@ function handleYouTubeLinks(content: string): string {
   return content.replace(
     /(?<!\()https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g,
     (match, videoId) => {
-      return `<iframe 
-        style="border: none; width: 100%; aspect-ratio: 16 / 9" 
-        src="https://www.youtube.com/embed/${videoId}" 
-        title="YouTube video player" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        referrerpolicy="strict-origin-when-cross-origin" 
+      return `<iframe
+        style="border: none; width: 100%; aspect-ratio: 16 / 9"
+        src="https://www.youtube.com/embed/${videoId}"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen>
       </iframe>`;
+    }
+  );
+}
+
+function handleVideos(content: string, postId?: string): string {
+  return content.replace(
+    /(<video[^>]*>)([\s\S]*?)(<\/video>)/g,
+    (match, openTag: string, inner: string, closeTag: string) => {
+      const processedInner = inner.replace(
+        /<source([^>]*)src=["']([^"']+)["']([^>]*)>/g,
+        (sourceMatch, beforeSrc: string, src: string, afterSrc: string) => {
+          const resolved = resolveMediaPath(src, postId);
+          return `<source${beforeSrc}src="${resolved}"${afterSrc}>`;
+        }
+      );
+      return `${openTag}${processedInner}${closeTag}`;
     }
   );
 }
@@ -94,7 +114,12 @@ function splitParagraphs(content: string): string {
     const block = blocks[i];
     const trimmed = block.trim();
     if (!trimmed) continue;
-    if (trimmed.startsWith('<figure') || trimmed.startsWith('<a href')) {
+    if (
+      trimmed.startsWith('<figure') ||
+      trimmed.startsWith('<a href') ||
+      trimmed.startsWith('<video') ||
+      trimmed.startsWith('<iframe')
+    ) {
       htmlParts.push(trimmed);
       continue;
     }
@@ -150,6 +175,7 @@ export async function convertMarkdownToHtml(
 
   let processedContent = handleImagesWithDescriptions(content, postId);
   processedContent = handleOtherImages(processedContent, postId);
+  processedContent = handleVideos(processedContent, postId);
   processedContent = handleYouTubeLinks(processedContent);
   processedContent = handleLinks(processedContent);
   return splitParagraphs(processedContent);
