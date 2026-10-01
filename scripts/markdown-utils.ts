@@ -19,6 +19,22 @@ export const getMdImagePath = (path: string, postId?: string) =>
 export const getSmImagePath = (path: string, postId?: string) =>
   getImagePath(path, 'sm', postId);
 
+export function getFirstContentImagePath(
+  content: string,
+  postId?: string
+): string | null {
+  const match = content.match(/!\[[^\]]*\]\(([^\)]+)\)/);
+  if (!match) return null;
+  const imagePath = match[1].trim();
+  if (imagePath.startsWith('/i/') || imagePath.startsWith('http')) {
+    return imagePath;
+  }
+  if (postId) {
+    return `/i/${postId}/${imagePath}`;
+  }
+  return imagePath;
+}
+
 function resolveMediaPath(mediaPath: string, postId?: string): string {
   if (mediaPath.startsWith('/i/') || mediaPath.startsWith('http')) {
     return mediaPath;

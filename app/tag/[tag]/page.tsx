@@ -4,9 +4,26 @@ import matter from 'gray-matter';
 import Link from 'next/link';
 import styles from './page.module.scss';
 import { getTagCategory } from '../../lib/tag-categories';
-import { getSmImagePath } from '../../../scripts/markdown-utils';
+import {
+  getSmImagePath,
+  getFirstContentImagePath,
+} from '../../../scripts/markdown-utils';
+import PhotographyGrid from '../../components/photography-grid/PhotographyGrid';
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
+
+function formatDate(dateString: string) {
+  if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+    const [day, month, year] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+  return dateString;
+}
 
 // +++ Tag handling +++
 
@@ -42,15 +59,18 @@ function getArticlesByTag(entries: string[], tag: string) {
     .map((id) => {
       const fullPath = path.join(DATA_DIRECTORY, id, `${id}.md`);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data } = matter(fileContents);
+      const { data, content } = matter(fileContents);
       const thumb = data.thumb ? getSmImagePath(data.thumb, id) : '';
+      const firstImage = getFirstContentImagePath(content, id);
       const tagCategory = getTagCategory(data.tags || []);
 
       return {
         id,
         title: data.title,
         thumb,
-        date: data.date,
+        firstImage,
+        date: formatDate(data.date),
+        rawDate: data.date,
         sortableDate: data.date.split('-').reverse().join('-'),
         tags: data.tags,
         excerpt: data.excerpt,
@@ -77,6 +97,26 @@ export default async function TagPage({
   const { tag } = await params;
   const entries = getDirectoryEntries();
   const articles = getArticlesByTag(entries, tag);
+
+  if (tag === 'photography') {
+    const photographyArticles = articles
+      .filter((article): article is typeof article & { firstImage: string } =>
+        Boolean(article.firstImage)
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.sortableDate).getTime() -
+          new Date(a.sortableDate).getTime()
+      )
+      .map((article) => ({
+        id: article.id,
+        title: article.title,
+        firstImage: article.firstImage,
+        date: article.date,
+      }));
+
+    return <PhotographyGrid articles={photographyArticles} />;
+  }
 
   return (
     <div>
