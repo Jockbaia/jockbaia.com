@@ -105,8 +105,9 @@ export default function ScuderiaTrack({
               {article.album ? (
                 <>
                   <Disc size={14} />
-                  {article.album} ({new Date(article.formattedDate).getFullYear()}
-                  )
+                  {`${article.album} (${new Date(
+                    article.formattedDate
+                  ).getFullYear()})`}
                 </>
               ) : (
                 <>
