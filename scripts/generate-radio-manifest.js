@@ -4,16 +4,25 @@ const path = require('path');
 const RADIO_DIR = path.join(process.cwd(), 'public', 'radio');
 const MANIFEST_PATH = path.join(process.cwd(), 'public', 'radio-tracks.json');
 
+function formatDate(rawDate) {
+  const day = rawDate.slice(4, 6);
+  const month = parseInt(rawDate.slice(2, 4), 10);
+  const year = `20${rawDate.slice(0, 2)}`;
+  const date = new Date(
+    `${year}-${String(month).padStart(2, '0')}-${day}T00:00:00`
+  );
+  const monthName = date.toLocaleDateString('en-GB', { month: 'long' });
+  return `${parseInt(day, 10)} ${monthName} ${year}`;
+}
+
 function parseTrack(file) {
   const base = path.basename(file, path.extname(file));
   const match = base.match(/^\[(\d{6})\]\s*(.+)$/);
   if (match) {
-    const rawDate = match[1];
-    const formattedDate = `${rawDate.slice(0, 2)}.${rawDate.slice(2, 4)}.${rawDate.slice(4, 6)}`;
     return {
       src: `/radio/${encodeURIComponent(file)}`,
       title: match[2].replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim(),
-      date: formattedDate,
+      date: formatDate(match[1]),
     };
   }
   return {

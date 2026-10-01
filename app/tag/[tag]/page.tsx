@@ -61,7 +61,7 @@ function getArticlesByTag(entries: string[], tag: string) {
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data, content } = matter(fileContents);
       const thumb = data.thumb ? getSmImagePath(data.thumb, id) : '';
-      const firstImage = getFirstContentImagePath(content, id);
+      const firstImage = getFirstContentImagePath(content, id, 'md');
       const tagCategory = getTagCategory(data.tags || []);
 
       return {

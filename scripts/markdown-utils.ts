@@ -21,18 +21,27 @@ export const getSmImagePath = (path: string, postId?: string) =>
 
 export function getFirstContentImagePath(
   content: string,
-  postId?: string
+  postId?: string,
+  size: 'original' | 'sm' | 'md' = 'original'
 ): string | null {
   const match = content.match(/!\[[^\]]*\]\(([^\)]+)\)/);
   if (!match) return null;
   const imagePath = match[1].trim();
-  if (imagePath.startsWith('/i/') || imagePath.startsWith('http')) {
+  if (imagePath.startsWith('http')) {
     return imagePath;
   }
-  if (postId) {
-    return `/i/${postId}/${imagePath}`;
+
+  let resolved = imagePath;
+  if (!imagePath.startsWith('/i/')) {
+    if (postId) {
+      resolved = `/i/${postId}/${imagePath}`;
+    }
   }
-  return imagePath;
+
+  if (size === 'original') {
+    return resolved;
+  }
+  return getImagePath(resolved, size);
 }
 
 function resolveMediaPath(mediaPath: string, postId?: string): string {

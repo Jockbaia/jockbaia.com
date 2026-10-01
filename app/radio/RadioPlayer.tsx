@@ -10,29 +10,16 @@ type Track = {
   date: string | null;
 };
 
-export default function RadioPlayer() {
-  const [tracks, setTracks] = useState<Track[]>([]);
+interface RadioPlayerProps {
+  tracks: Track[];
+}
+
+export default function RadioPlayer({ tracks }: RadioPlayerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const seekRandomRef = useRef(false);
-
-  useEffect(() => {
-    fetch('/radio-tracks.json')
-      .then((response) => response.json())
-      .then((data: Track[]) => {
-        setTracks(data);
-        if (data.length > 0) {
-          setCurrentIndex(Math.floor(Math.random() * data.length));
-        }
-        setLoaded(true);
-      })
-      .catch(() => {
-        setTracks([]);
-        setLoaded(true);
-      });
-  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -63,44 +50,26 @@ export default function RadioPlayer() {
     setIsPlaying(true);
   };
 
-  const playRandom = () => {
-    if (tracks.length === 0) return;
-
-    if (tracks.length === 1) {
-      const audio = audioRef.current;
-      if (audio && audio.duration) {
-        audio.currentTime = Math.random() * audio.duration;
-      } else {
-        seekRandomRef.current = true;
-      }
-      setIsPlaying(true);
-      return;
-    }
-
+  const pickRandomTrack = () => {
+    if (tracks.length === 1) return 0;
     let nextIndex = currentIndex;
     while (nextIndex === currentIndex) {
       nextIndex = Math.floor(Math.random() * tracks.length);
     }
+    return nextIndex;
+  };
+
+  const start = () => {
+    const nextIndex = pickRandomTrack();
     seekRandomRef.current = true;
+    setHasStarted(true);
     setCurrentIndex(nextIndex);
     setIsPlaying(true);
   };
 
   const togglePlay = () => {
-    if (isPlaying) {
-      setIsPlaying(false);
-    } else {
-      playRandom();
-    }
+    setIsPlaying((prev) => !prev);
   };
-
-  if (!loaded) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.status}>Loading radio...</div>
-      </div>
-    );
-  }
 
   if (tracks.length === 0) {
     return (
@@ -113,19 +82,34 @@ export default function RadioPlayer() {
   return (
     <div className={styles.page}>
       <div className={styles.player}>
-        {tracks[currentIndex].date && (
-          <div className={styles.date}>{tracks[currentIndex].date}</div>
-        )}
-        <div className={styles.title}>{tracks[currentIndex].title}</div>
-        <div className={styles.controls}>
+        <img src="/radio/radio.png" alt="Radio" className={styles.cover} />
+        {!hasStarted ? (
           <button
             type="button"
-            onClick={togglePlay}
-            aria-label={isPlaying ? 'Pause' : 'Play'}
+            onClick={start}
+            aria-label="Play"
+            className={styles.startButton}
           >
-            {isPlaying ? <Pause size={40} /> : <Play size={40} />}
+            <Play size={32} />
           </button>
-        </div>
+        ) : (
+          <div className={styles.infoRow}>
+            <div className={styles.texts}>
+              <div className={styles.title}>{tracks[currentIndex].title}</div>
+              {tracks[currentIndex].date && (
+                <div className={styles.date}>{tracks[currentIndex].date}</div>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={togglePlay}
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+              className={styles.playButton}
+            >
+              {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+            </button>
+          </div>
+        )}
         <audio
           ref={audioRef}
           src={tracks[currentIndex].src}

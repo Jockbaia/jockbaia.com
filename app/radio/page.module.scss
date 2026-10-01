@@ -1,54 +1,80 @@
-@use '../../styles/colors.scss' as colors;
-
 .page {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  padding: var(--container-padding);
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #fffd00;
 }
 
 .player {
   display: flex;
   flex-direction: column;
+  flex: 1;
   align-items: center;
+  justify-content: center;
   gap: 24px;
-  text-align: center;
 }
 
-.date {
-  font-size: 14px;
-  color: colors.$gray;
-  letter-spacing: 0.1em;
+.cover {
+  max-width: 100%;
+  max-height: 50vh;
+  object-fit: contain;
+}
+
+.infoRow {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.texts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  min-width: 0;
 }
 
 .title {
   font-size: 24px;
-  color: colors.$white;
-  max-width: 600px;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.controls {
+.date {
+  font-size: 16px;
+  color: #000000;
+}
+
+.playButton,
+.startButton {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid #000000;
+  border-radius: 0;
+  color: #000000;
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
+  transition: opacity 0.2s ease;
 
-  button {
-    background: none;
-    border: none;
-    color: colors.$white;
-    cursor: pointer;
-    padding: 12px;
-    line-height: 0;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: colors.$yellow;
-    }
+  &:hover {
+    opacity: 0.6;
   }
 }
 
 .status {
+  margin: auto;
   font-size: 18px;
-  color: colors.$gray;
+  color: #000000;
 }
