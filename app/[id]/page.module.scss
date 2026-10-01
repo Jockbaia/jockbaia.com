@@ -1,27 +1,69 @@
 @use '../../styles/colors.scss' as colors;
 
 .title {
-  font-size: 18px;
-  color: colors.$gray;
+  font-size: 20px;
+  margin-bottom: 4px;
+  color: colors.$yellow;
+
+  @media (min-width: 601px) {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
 }
 
-.meta {
-  color: colors.$dark-gray;
-  margin-top: 6px;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 40px;
-  font-size: 15px;
+.dateRow {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(colors.$dark-gray, 0.6);
+  gap: 12px;
 }
 
-.tag {
-  text-decoration: none;
-  color: inherit;
-  transition: text-decoration 0.2s ease;
+.date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: colors.$gray;
+  font-size: 12px;
+  min-height: 20px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 
-  &:hover {
-    color: colors.$white;
+  svg {
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 601px) {
+    font-size: 13px;
+  }
+}
+
+.metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: colors.$gray;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  svg {
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+
+  span {
+    line-height: 1;
+  }
+
+  @media (min-width: 601px) {
+    font-size: 13px;
   }
 }
 
@@ -38,6 +80,11 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+
+  @media (min-width: 601px) {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
   blockquote {
     color: colors.$gray;

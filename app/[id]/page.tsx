@@ -2,13 +2,26 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import styles from './page.module.scss';
-import { Calendar, Tag } from 'lucide-react';
-import Link from 'next/link';
+import { Calendar } from 'lucide-react';
 import {
   convertMarkdownToHtml,
   getImagePath,
 } from '../../scripts/markdown-utils';
 import Logo from '../components/logo/Logo';
+import { getTagCategory } from '../lib/tag-categories';
+
+function formatDate(dateString: string) {
+  if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+    const [day, month, year] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+  return dateString;
+}
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 
@@ -84,6 +97,7 @@ export default async function Article({
   const fullPath = getMarkdownFilePath(id);
   const { data, content } = getMarkdownFileData(fullPath);
   const contentHtml = await convertMarkdownToHtml(content, id);
+  const tagCategory = getTagCategory(data.tags || [], 14);
 
   const hasBlogTag = Array.isArray(data.tags) && data.tags.includes('blog');
   const hasPicsTag =
@@ -97,18 +111,17 @@ export default async function Article({
         <div className={styles.title}>{data.title}</div>
 
         {/* Metadata */}
-        <div className={styles.meta}>
-          <Calendar size={15} />
-          {data.date}
-          <Tag size={15} />
-          {data.tags.map((tag: string, index: number) => (
-            <span key={index}>
-              <Link className={styles.tag} href={`/tag/${tag}`}>
-                {tag}
-              </Link>
-              {index < data.tags.length - 1 && ', '}
-            </span>
-          ))}
+        <div className={styles.dateRow}>
+          <div className={styles.date}>
+            <Calendar size={14} />
+            {formatDate(data.date)}
+          </div>
+          {tagCategory && (
+            <div className={styles.metric} title={tagCategory.label}>
+              {tagCategory.icon}
+              <span>{tagCategory.label}</span>
+            </div>
+          )}
         </div>
 
         {/* Content */}

@@ -3,6 +3,7 @@ title: 'Hello world'
 date: '01-09-2024'
 tags: ['blog']
 thumb: '1.jpg'
+thumbWide: '1-t.jpg'
 excerpt: 'In the midst of a web of stimuli, does it make sense to carve out a quiet space to let a bunch of human-made content flow freely?'
 ---
 

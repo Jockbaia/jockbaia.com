@@ -22,9 +22,14 @@ export const tagCategoryMap: Record<string, TagCategory> = {
 };
 
 export function getTagCategory(
-  tags: string[]
+  tags: string[],
+  size: number = 24
 ): { icon: React.ReactNode; label: string } | null {
   const matchedTag = tags.find((t) => tagCategoryMap[t]);
   if (!matchedTag) return null;
-  return tagCategoryMap[matchedTag];
+  const config = tagCategoryMap[matchedTag];
+  return {
+    icon: React.cloneElement(config.icon as React.ReactElement, { size }),
+    label: config.label,
+  };
 }
