@@ -89,6 +89,33 @@ function extractDateFromFileName(fileName) {
   return null;
 }
 
+function getInsertionDate(fileName: string): Date | null {
+  const match = fileName.match(/^(\d{6})/);
+  if (!match) return null;
+  const dateString = match[1];
+  const year = parseInt(`20${dateString.slice(0, 2)}`, 10);
+  const month = parseInt(dateString.slice(2, 4), 10) - 1;
+  const day = parseInt(dateString.slice(4, 6), 10);
+  return new Date(year, month, day);
+}
+
+function getReleaseDate(dateString: string | undefined): Date | null {
+  if (!dateString || !/^\d{2}-\d{2}-\d{4}$/.test(dateString)) return null;
+  const [day, month, year] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function getDateDiffDays(
+  fileName: string,
+  released: string | undefined
+): number | null {
+  const insertion = getInsertionDate(fileName);
+  const release = getReleaseDate(released);
+  if (!insertion || !release) return null;
+  const diffTime = insertion.getTime() - release.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
 // +++ Page list rendering +++
 
 export default async function ScuderiaPage() {
@@ -100,11 +127,13 @@ export default async function ScuderiaPage() {
         <div className={styles.grid}>
           {articles.map((article) => {
             const displayDate = extractDateFromFileName(article.id);
+            const dateDiff = getDateDiffDays(article.id, article.date);
             return (
               <ScuderiaTrack
                 key={article.id}
                 article={article}
                 displayDate={displayDate}
+                dateDiff={dateDiff}
               />
             );
           })}

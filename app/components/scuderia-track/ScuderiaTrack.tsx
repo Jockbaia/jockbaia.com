@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from '../../scuderia/page.module.scss';
-import { Calendar, User, Disc, Music, Tag } from 'lucide-react';
+import { Calendar, User, Disc, Music, Diff } from 'lucide-react';
 import { usePlayer } from '../player/PlayerContext';
 
 function getYouTubeId(url: string): string | null {
@@ -10,6 +10,15 @@ function getYouTubeId(url: string): string | null {
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
   );
   return match ? match[1] : null;
+}
+
+function formatDateDiff(days: number): string {
+  if (days >= 365) {
+    const years = days / 365;
+    const rounded = Math.round(years * 10) / 10;
+    return `${rounded} year${rounded === 1 ? '' : 's'}`;
+  }
+  return `${days} day${days === 1 ? '' : 's'}`;
 }
 
 interface ScuderiaTrackProps {
@@ -25,11 +34,13 @@ interface ScuderiaTrackProps {
     youtube: string;
   };
   displayDate: string | null;
+  dateDiff: number | null;
 }
 
 export default function ScuderiaTrack({
   article,
   displayDate,
+  dateDiff,
 }: ScuderiaTrackProps) {
   const { current, play } = usePlayer();
   const videoId = article.youtube ? getYouTubeId(article.youtube) : null;
@@ -43,67 +54,78 @@ export default function ScuderiaTrack({
 
   return (
     <div className={styles.track__wrapper}>
-      <div className={styles.track__header}>
-        <div className={styles.track__thumbWrap}>
-          {article.thumb && (
-            <img
-              src={article.thumb}
-              alt={article.title}
-              className={styles.track__thumbnail}
-            />
+      {(displayDate || dateDiff !== null) && (
+        <div className={styles.track__dateRow}>
+          {displayDate && (
+            <div className={styles.track__date}>
+              <Calendar size={14} />
+              {displayDate}
+            </div>
           )}
-          {article.youtube && (
-            <button
-              onClick={handlePlay}
-              className={styles.track__youtube}
-              aria-label={`Play ${article.title}`}
+          {dateDiff !== null && (
+            <div
+              className={styles.track__metric}
+              title="Time between release and addition to Scuderia"
             >
-              {isPlaying ? '▶' : '▶︎'}
-            </button>
+              <Diff size={12} />
+              <span>{formatDateDiff(dateDiff)}</span>
+            </div>
           )}
         </div>
-        <div className={styles.track__info}>
-          <div className={styles.track__info__top}>
-            <div>
+      )}
+      <div className={styles.track__main}>
+        <div className={styles.track__header}>
+          <div className={styles.track__thumbWrap}>
+            {article.thumb && (
+              <img
+                src={article.thumb}
+                alt={article.title}
+                className={styles.track__thumbnail}
+              />
+            )}
+            {article.youtube && (
+              <button
+                onClick={handlePlay}
+                className={styles.track__youtube}
+                aria-label={`Play ${article.title}`}
+              >
+                {isPlaying ? '▶' : '▶︎'}
+              </button>
+            )}
+          </div>
+          <div className={styles.track__info}>
+            <div className={styles.track__info__top}>
               <div className={styles.track__title}>{article.title}</div>
               <div className={styles.track__artist}>
                 <User size={14} />
                 {article.artist?.join(', ')}
               </div>
             </div>
-            {displayDate && (
-              <div className={styles.track__date}>
-                <Calendar size={14} />
-                {displayDate}
-              </div>
-            )}
-          </div>
-          <div className={styles.track__album}>
-            {article.album ? (
-              <>
-                <Disc size={14} />
-                {article.album} ({new Date(article.formattedDate).getFullYear()}
-                )
-              </>
-            ) : (
-              <>
-                <Music size={14} />
-                Released as a single in{' '}
-                {new Date(article.formattedDate).getFullYear()}
-              </>
-            )}
+            <div className={styles.track__album}>
+              {article.album ? (
+                <>
+                  <Disc size={14} />
+                  {article.album} ({new Date(article.formattedDate).getFullYear()}
+                  )
+                </>
+              ) : (
+                <>
+                  <Music size={14} />
+                  Released as a single in{' '}
+                  {new Date(article.formattedDate).getFullYear()}
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.track__content}>{article.content}</div>
-      <div className={styles.track__genres}>
-        {article.genres?.map((genre) => (
-          <span key={genre} className={styles.track__genre}>
+        <div className={styles.track__content}>{article.content}</div>
+        {/* {article.genres && article.genres.length > 0 && (
+          <div className={styles.track__genres}>
             <Tag size={10} />
-            {genre}
-          </span>
-        ))}
+            <span>{article.genres.join(', ')}</span>
+          </div>
+        )} */}
       </div>
     </div>
   );
