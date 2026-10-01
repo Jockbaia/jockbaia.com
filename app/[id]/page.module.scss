@@ -1,12 +1,12 @@
 @use '../../styles/colors.scss' as colors;
 
 .title {
-  font-size: 20px;
+  font-size: 22px;
   margin-bottom: 4px;
   color: colors.$yellow;
 
   @media (min-width: 601px) {
-    font-size: 22px;
+    font-size: 24px;
     margin-bottom: 6px;
   }
 }
@@ -18,7 +18,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(colors.$dark-gray, 0.6);
+  border-bottom: 2px solid rgba(colors.$dark-gray, 0.6);
   gap: 12px;
 }
 
@@ -27,7 +27,7 @@
   align-items: center;
   gap: 6px;
   color: colors.$gray;
-  font-size: 12px;
+  font-size: 14px;
   min-height: 20px;
   line-height: 1.2;
   text-transform: uppercase;
@@ -38,7 +38,7 @@
   }
 
   @media (min-width: 601px) {
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 
@@ -47,7 +47,7 @@
   align-items: center;
   gap: 4px;
   color: colors.$gray;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   text-transform: uppercase;
@@ -63,7 +63,7 @@
   }
 
   @media (min-width: 601px) {
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 
@@ -75,14 +75,14 @@
 
 .content {
   color: colors.$white;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 22px;
   display: flex;
   flex-direction: column;
   gap: 30px;
 
   @media (min-width: 601px) {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 24px;
   }
 
