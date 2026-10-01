@@ -29,7 +29,10 @@ export function getTagCategory(
   if (!matchedTag) return null;
   const config = tagCategoryMap[matchedTag];
   return {
-    icon: React.cloneElement(config.icon as React.ReactElement, { size }),
+    icon: React.cloneElement(
+      config.icon as React.ReactElement<{ size?: number }>,
+      { size }
+    ),
     label: config.label,
   };
 }
