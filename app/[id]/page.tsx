@@ -1,4 +1,5 @@
 import styles from './page.module.scss';
+import Link from 'next/link';
 import { Calendar } from 'lucide-react';
 import { convertMarkdownToHtml, getImagePath } from '../lib/markdown';
 import Logo from '../components/logo/Logo';
@@ -72,10 +73,14 @@ export default async function Article({
             {formatDate(data.date)}
           </div>
           {tagCategory && (
-            <div className={styles.metric} title={tagCategory.label}>
+            <Link
+              href={tagCategory.href}
+              className={styles.metric}
+              title={tagCategory.label}
+            >
               {tagCategory.icon}
               <span>{tagCategory.label}</span>
-            </div>
+            </Link>
           )}
         </div>
 

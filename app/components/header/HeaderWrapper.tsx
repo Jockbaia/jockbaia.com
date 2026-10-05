@@ -1,10 +1,12 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Header from './Header';
+import type { ScuderiaArticle } from '../../lib/scuderia';
 
-export default function HeaderWrapper() {
-  const pathname = usePathname();
-  if (pathname === '/radio') return null;
-  return <Header />;
+interface HeaderWrapperProps {
+  latestScuderia?: ScuderiaArticle | null;
+}
+
+export default function HeaderWrapper({ latestScuderia }: HeaderWrapperProps) {
+  return <Header latestScuderia={latestScuderia} />;
 }

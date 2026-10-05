@@ -1,0 +1,29 @@
+@use '../../styles/colors.scss' as colors;
+@use '../../styles/type.scss' as sizes;
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+.title {
+  font-size: sizes.$xl;
+  color: colors.$yellow;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid colors.$border;
+}
+
+.content {
+  color: colors.$white;
+  font-size: sizes.$md;
+  line-height: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (min-width: 601px) {
+    line-height: 24px;
+  }
+}

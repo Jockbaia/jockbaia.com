@@ -12,6 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import styles from './Header.module.scss';
+import type { ScuderiaArticle } from '../../lib/scuderia';
 
 function getLogoSrc(logo: string | undefined | null): string {
   return logo === 'blog'
@@ -27,6 +28,10 @@ function detectLogo(pathname: string): string | undefined {
   return undefined;
 }
 
+interface HeaderProps {
+  latestScuderia?: ScuderiaArticle | null;
+}
+
 const NAV_ITEMS: [href: string, label: string, Icon: LucideIcon][] = [
   ['/about', 'About', User],
   ['/tag/blog', 'Blog', FileText],
@@ -35,60 +40,59 @@ const NAV_ITEMS: [href: string, label: string, Icon: LucideIcon][] = [
   ['/tag/photography', 'Pics', Camera],
 ];
 
-export default function Header() {
+export default function Header({ latestScuderia }: HeaderProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(() => detectLogo(pathname));
   const [nextLogo, setNextLogo] = useState<string | undefined | null>(null);
-  const prevLogo = useRef(currentLogo);
-  const eventReceived = useRef(false);
+  const prevLogo = useRef<string | undefined>(currentLogo);
+  const lastEvent = useRef<{ path: string; logo: string } | null>(null);
+  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeSidebar = () => setSidebarOpen(false);
 
   useEffect(() => {
-    const logo = detectLogo(pathname);
-    if (logo && logo !== currentLogo) {
-      setCurrentLogo(logo);
-      prevLogo.current = logo;
+    const evAtEffect = lastEvent.current;
+    if (evAtEffect && evAtEffect.path === pathname) {
+      applyLogo(evAtEffect.logo);
+      return;
     }
-  }, []);
-
-  useEffect(() => {
-    const logo = detectLogo(pathname);
-    eventReceived.current = false;
-    if (logo !== prevLogo.current) {
-      if (logo) {
-        startTransition(logo);
+    const detected = detectLogo(pathname);
+    if (detected) {
+      applyLogo(detected);
+      return;
+    }
+    const timer = setTimeout(() => {
+      const evNow = lastEvent.current;
+      if (evNow && (evNow.path === pathname || evNow !== evAtEffect)) {
+        applyLogo(evNow.logo);
       } else {
-        const timer = setTimeout(() => {
-          if (!eventReceived.current) {
-            startTransition(logo);
-          }
-        }, 100);
-        return () => clearTimeout(timer);
+        applyLogo(undefined);
       }
-    }
+    }, 100);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   useEffect(() => {
     const handler = (e: CustomEvent) => {
       const logo = e.detail;
-      eventReceived.current = true;
-      if (logo !== prevLogo.current) {
-        startTransition(logo);
-      }
+      lastEvent.current = { path: window.location.pathname, logo };
+      applyLogo(logo);
     };
     document.body.addEventListener('pagelogo', handler as EventListener);
     return () =>
       document.body.removeEventListener('pagelogo', handler as EventListener);
   }, []);
 
-  function startTransition(logo: string | undefined) {
+  function applyLogo(logo: string | undefined) {
+    if (logo === prevLogo.current) return;
+    prevLogo.current = logo;
+    if (transitionTimer.current) clearTimeout(transitionTimer.current);
     setNextLogo(logo);
-    setTimeout(() => {
+    transitionTimer.current = setTimeout(() => {
       setCurrentLogo(logo);
       setNextLogo(null);
+      transitionTimer.current = null;
     }, 300);
-    prevLogo.current = logo;
   }
 
   return (
@@ -144,6 +148,23 @@ export default function Header() {
                 </li>
               ))}
             </ul>
+            {latestScuderia && (
+              <Link
+                href="/scuderia"
+                className={styles.sidebar__scuderia}
+                onClick={closeSidebar}
+              >
+                <img src={latestScuderia.thumb} alt="" width={40} height={40} />
+                <span className={styles.sidebar__scuderiaInfo}>
+                  <span className={styles.sidebar__scuderiaTitle}>
+                    {latestScuderia.title}
+                  </span>
+                  <span className={styles.sidebar__scuderiaArtist}>
+                    {latestScuderia.artist?.join(', ')}
+                  </span>
+                </span>
+              </Link>
+            )}
           </div>
         </nav>
       </div>

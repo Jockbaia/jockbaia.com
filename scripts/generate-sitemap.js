@@ -34,7 +34,7 @@ function getAllUrls() {
         .map((tag) => tag.toLowerCase().replace(/\s+/g, '-'))
     ),
   ].map((tag) => `${SITE_URL}/tag/${tag}`);
-  const staticUrls = [SITE_URL, `${SITE_URL}/scuderia`];
+  const staticUrls = [SITE_URL, `${SITE_URL}/about`, `${SITE_URL}/scuderia`];
 
   return [...staticUrls, ...tagUrls, ...postUrls];
 }
