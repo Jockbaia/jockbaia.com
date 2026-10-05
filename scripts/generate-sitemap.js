@@ -1,6 +1,7 @@
 // scripts/generate-sitemap.js
 const fs = require('fs');
 const path = require('path');
+const matter = require('gray-matter');
 
 const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
 const SITE_URL = 'https://jockbaia.com';
@@ -14,13 +15,28 @@ function getDirectoryEntries() {
     );
 }
 
-function getAllUrls() {
-  const entries = getDirectoryEntries();
-  const postUrls = entries.map((id) => {
-    return `${SITE_URL}/${id}`;
+function getPosts() {
+  return getDirectoryEntries().map((id) => {
+    const file = path.join(DATA_DIRECTORY, id, `${id}.md`);
+    return { id, ...matter(fs.readFileSync(file, 'utf8')).data };
   });
-  const staticUrls = [SITE_URL, `${SITE_URL}/blog`, `${SITE_URL}/scuderia`];
-  return [...staticUrls, ...postUrls];
+}
+
+function getAllUrls() {
+  const posts = getPosts();
+
+  const postUrls = posts.map((post) => `${SITE_URL}/${post.id}`);
+  const tagUrls = [
+    ...new Set(
+      posts
+        .filter((post) => !post.hidden)
+        .flatMap((post) => post.tags || [])
+        .map((tag) => tag.toLowerCase().replace(/\s+/g, '-'))
+    ),
+  ].map((tag) => `${SITE_URL}/tag/${tag}`);
+  const staticUrls = [SITE_URL, `${SITE_URL}/scuderia`];
+
+  return [...staticUrls, ...tagUrls, ...postUrls];
 }
 
 function generateSitemap(urls) {

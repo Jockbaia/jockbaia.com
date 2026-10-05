@@ -1,9 +1,11 @@
+@use '../../styles/colors.scss' as colors;
+
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   padding: 20px;
-  background-color: #fffd00;
+  background-color: colors.$yellow;
 }
 
 .player {
@@ -40,7 +42,7 @@
 
 .title {
   font-size: 24px;
-  color: #000000;
+  color: colors.$black;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -48,7 +50,7 @@
 
 .date {
   font-size: 16px;
-  color: #000000;
+  color: colors.$black;
 }
 
 .playButton,
@@ -60,9 +62,9 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 2px solid #000000;
+  border: 2px solid colors.$black;
   border-radius: 0;
-  color: #000000;
+  color: colors.$black;
   cursor: pointer;
   padding: 0;
   line-height: 0;
@@ -76,5 +78,5 @@
 .status {
   margin: auto;
   font-size: 18px;
-  color: #000000;
+  color: colors.$black;
 }

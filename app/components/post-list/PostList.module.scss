@@ -1,0 +1,96 @@
+@use '../../../styles/colors.scss' as colors;
+
+.container {
+  max-width: fit-content;
+  margin: 0 auto;
+  padding: 0px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 30px;
+  max-width: 900px;
+}
+
+.card {
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  color: colors.$white;
+  margin-bottom: -20px;
+}
+
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  position: relative;
+}
+
+.title {
+  font-size: 17px;
+  color: colors.$white;
+  line-height: 18px;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+  text-align: left;
+  padding-right: 25px;
+}
+
+.date {
+  color: colors.$gray;
+  margin-top: -8px;
+  font-size: 17px;
+  transition: color 0.3s ease;
+  text-align: left;
+}
+
+.tag {
+  color: colors.$gray;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: color 0.3s ease;
+}
+
+.card:hover {
+  .title,
+  .tag {
+    color: colors.$yellow;
+  }
+
+  .date {
+    color: colors.$accent-dim;
+  }
+}
+
+.card:active {
+  .title,
+  .tag {
+    color: colors.$white;
+  }
+
+  .date {
+    color: colors.$text-dim;
+  }
+}
+
+@media (max-width: 810px) {
+  .card {
+    padding: 0 0 40px 0;
+  }
+
+  .container {
+    padding: 0 var(--container-padding);
+  }
+}

@@ -19,31 +19,6 @@ export const getMdImagePath = (path: string, postId?: string) =>
 export const getSmImagePath = (path: string, postId?: string) =>
   getImagePath(path, 'sm', postId);
 
-export function getFirstContentImagePath(
-  content: string,
-  postId?: string,
-  size: 'original' | 'sm' | 'md' = 'original'
-): string | null {
-  const match = content.match(/!\[[^\]]*\]\(([^\)]+)\)/);
-  if (!match) return null;
-  const imagePath = match[1].trim();
-  if (imagePath.startsWith('http')) {
-    return imagePath;
-  }
-
-  let resolved = imagePath;
-  if (!imagePath.startsWith('/i/')) {
-    if (postId) {
-      resolved = `/i/${postId}/${imagePath}`;
-    }
-  }
-
-  if (size === 'original') {
-    return resolved;
-  }
-  return getImagePath(resolved, size);
-}
-
 function resolveMediaPath(mediaPath: string, postId?: string): string {
   if (mediaPath.startsWith('/i/') || mediaPath.startsWith('http')) {
     return mediaPath;
@@ -54,8 +29,11 @@ function resolveMediaPath(mediaPath: string, postId?: string): string {
   return mediaPath;
 }
 
-function resolveImagePath(imagePath: string, postId?: string): string {
-  return resolveMediaPath(imagePath, postId);
+function linkedImage(resolved: string, altText: string): string {
+  const mdImagePath = getMdImagePath(resolved);
+  return `<a href="${resolved}" target="_blank" rel="noopener noreferrer">
+                <img src="${mdImagePath}" alt="${altText}" />
+              </a>`;
 }
 
 function handleImagesWithDescriptions(
@@ -65,12 +43,9 @@ function handleImagesWithDescriptions(
   return content.replace(
     /!\[([^\]]*)\]\(([^\)]+)\)\s*\n\*([^\*]+)\*/g,
     (match, altText, imagePath, description) => {
-      const resolved = resolveImagePath(imagePath, postId);
-      const mdImagePath = getMdImagePath(resolved);
+      const resolved = resolveMediaPath(imagePath, postId);
       return `<figure>
-                <a href="${resolved}" target="_blank" rel="noopener noreferrer">
-                  <img src="${mdImagePath}" alt="${altText}" />
-                </a>
+                ${linkedImage(resolved, altText)}
                 <figcaption><em>${description.trim()}</em></figcaption>
               </figure>`;
     }
@@ -80,13 +55,8 @@ function handleImagesWithDescriptions(
 function handleOtherImages(content: string, postId?: string): string {
   return content.replace(
     /!\[([^\]]*)\]\(([^\)]+)\)/g,
-    (match, altText, imagePath) => {
-      const resolved = resolveImagePath(imagePath, postId);
-      const mdImagePath = getMdImagePath(resolved);
-      return `<a href="${resolved}" target="_blank" rel="noopener noreferrer">
-                <img src="${mdImagePath}" alt="${altText}" />
-              </a>`;
-    }
+    (match, altText, imagePath) =>
+      linkedImage(resolveMediaPath(imagePath, postId), altText)
   );
 }
 

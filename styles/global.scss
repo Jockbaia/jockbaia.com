@@ -27,11 +27,23 @@
 html,
 body {
   background-color: colors.$black;
+  color: colors.$white;
+  color-scheme: dark;
   font-family: 'Averia Libre', sans-serif;
   padding: 0;
   margin: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+::selection {
+  background: colors.$yellow;
+  color: colors.$black;
+}
+
+:focus-visible {
+  outline: 2px solid colors.$yellow;
+  outline-offset: 2px;
 }
 
 html::-webkit-scrollbar {

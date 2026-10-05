@@ -1,93 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import Link from 'next/link';
-import styles from './page.module.scss';
-import { getTagCategory } from '../../lib/tag-categories';
-import {
-  getSmImagePath,
-  getFirstContentImagePath,
-} from '../../../scripts/markdown-utils';
-import PhotographyGrid from '../../components/photography-grid/PhotographyGrid';
-
-const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
-
-function formatDate(dateString: string) {
-  if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
-    const [day, month, year] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  }
-  return dateString;
-}
-
-// +++ Tag handling +++
-
-function getDirectoryEntries() {
-  return fs
-    .readdirSync(DATA_DIRECTORY)
-    .filter((entry) =>
-      fs.statSync(path.join(DATA_DIRECTORY, entry)).isDirectory()
-    );
-}
+import PostList from '../../components/post-list/PostList';
+import { getAllTags } from '../../lib/posts';
 
 export async function generateStaticParams() {
-  const entries = getDirectoryEntries();
-  const tags = getAllTags(entries);
-  return Array.from(tags).map((tag) => ({ tag }));
+  return getAllTags().map((tag) => ({ tag }));
 }
-
-function getAllTags(entries: string[]): Set<string> {
-  const tags = new Set<string>();
-  entries.forEach((id) => {
-    const fullPath = path.join(DATA_DIRECTORY, id, `${id}.md`);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data } = matter(fileContents);
-    data.tags.forEach((tag) =>
-      tags.add(tag.toLowerCase().replace(/\s+/g, '-'))
-    );
-  });
-  return tags;
-}
-
-function getArticlesByTag(entries: string[], tag: string) {
-  return entries
-    .map((id) => {
-      const fullPath = path.join(DATA_DIRECTORY, id, `${id}.md`);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data, content } = matter(fileContents);
-      const thumb = data.thumb ? getSmImagePath(data.thumb, id) : '';
-      const firstImage = getFirstContentImagePath(content, id, 'md');
-      const tagCategory = getTagCategory(data.tags || []);
-
-      return {
-        id,
-        title: data.title,
-        thumb,
-        firstImage,
-        date: formatDate(data.date),
-        rawDate: data.date,
-        sortableDate: data.date.split('-').reverse().join('-'),
-        tags: data.tags,
-        excerpt: data.excerpt,
-        categoryTag: tagCategory?.icon ?? null,
-        categoryTagLabel: tagCategory?.label ?? '',
-      };
-    })
-    .filter((article) =>
-      article.tags.some((t) => t.toLowerCase().replace(/\s+/g, '-') === tag)
-    )
-    .sort(
-      (a, b) =>
-        new Date(b.sortableDate).getTime() - new Date(a.sortableDate).getTime()
-    );
-}
-
-// +++ Page list rendering +++
 
 export default async function TagPage({
   params,
@@ -95,58 +11,6 @@ export default async function TagPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
-  const entries = getDirectoryEntries();
-  const articles = getArticlesByTag(entries, tag);
 
-  if (tag === 'photography') {
-    const photographyArticles = articles
-      .filter((article): article is typeof article & { firstImage: string } =>
-        Boolean(article.firstImage)
-      )
-      .sort(
-        (a, b) =>
-          new Date(b.sortableDate).getTime() -
-          new Date(a.sortableDate).getTime()
-      )
-      .map((article) => ({
-        id: article.id,
-        title: article.title,
-        firstImage: article.firstImage,
-        date: article.date,
-      }));
-
-    return <PhotographyGrid articles={photographyArticles} />;
-  }
-
-  return (
-    <div>
-      <div className={styles.container}>
-        <div className={styles.grid}>
-          {articles.map((article) => (
-            <Link
-              key={article.id}
-              href={`/${article.id}`}
-              className={styles.card}
-            >
-              <img
-                src={article.thumb}
-                alt={article.title}
-                className={styles.thumbnail}
-              />
-              <div className={styles.meta}>
-                <div className={styles.title}>{article.title}</div>
-                <div className={styles.date}>{article.date}</div>
-                {article.categoryTag && (
-                  <span className={styles.tag}>{article.categoryTag}</span>
-                )}
-              </div>
-              {tag === 'blog' && article.excerpt && (
-                <div className={styles.excerpt}>{article.excerpt}</div>
-              )}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return <PostList tag={tag} />;
 }

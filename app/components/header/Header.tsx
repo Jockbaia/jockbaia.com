@@ -15,7 +15,7 @@ function getLogoSrc(logo: string | undefined | null): string {
 }
 
 function detectLogo(pathname: string): string | undefined {
-  if (pathname === '/blog') return 'blog';
+  if (pathname === '/tag/blog') return 'blog';
   if (pathname.startsWith('/tag/photography')) return 'pics';
   return undefined;
 }
@@ -24,6 +24,14 @@ interface HeaderProps {
   latestScuderia?: ScuderiaArticle | null;
 }
 
+const NAV_ITEMS: [href: string, label: string][] = [
+  ['/about', 'About'],
+  ['/tag/blog', 'Blog'],
+  ['/tag/music', 'Music'],
+  ['/tag/album-arts', 'Album Arts'],
+  ['/tag/photography', 'Pics'],
+];
+
 export default function Header({ latestScuderia }: HeaderProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,6 +39,7 @@ export default function Header({ latestScuderia }: HeaderProps) {
   const [nextLogo, setNextLogo] = useState<string | undefined | null>(null);
   const prevLogo = useRef(currentLogo);
   const eventReceived = useRef(false);
+  const closeSidebar = () => setSidebarOpen(false);
 
   useEffect(() => {
     const logo = detectLogo(pathname);
@@ -115,50 +124,26 @@ export default function Header({ latestScuderia }: HeaderProps) {
 
         <div
           className={`${styles.backdrop} ${sidebarOpen ? styles['backdrop--visible'] : ''}`}
-          onClick={() => setSidebarOpen(false)}
+          onClick={closeSidebar}
         />
 
         <nav
           className={`${styles.sidebar} ${sidebarOpen ? styles['sidebar--open'] : ''}`}
         >
           <ul className={styles.sidebar__list}>
-            <li>
-              <Link href="/about" onClick={() => setSidebarOpen(false)}>
-                About
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog" onClick={() => setSidebarOpen(false)}>
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link href="/tag/music" onClick={() => setSidebarOpen(false)}>
-                Music
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/tag/album-arts"
-                onClick={() => setSidebarOpen(false)}
-              >
-                Album Arts
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/tag/photography"
-                onClick={() => setSidebarOpen(false)}
-              >
-                Pics
-              </Link>
-            </li>
+            {NAV_ITEMS.map(([href, label]) => (
+              <li key={href}>
+                <Link href={href} onClick={closeSidebar}>
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
           {latestScuderia && (
             <Link
               href="/scuderia"
               className={styles.nowListening}
-              onClick={() => setSidebarOpen(false)}
+              onClick={closeSidebar}
             >
               <span className={styles.nowListening__label}>
                 now listening

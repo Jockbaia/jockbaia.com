@@ -4,6 +4,7 @@ import React from 'react';
 import styles from '../../scuderia/page.module.scss';
 import { Calendar, User, Disc, Music, Diff } from 'lucide-react';
 import { usePlayer } from '../player/PlayerContext';
+import type { ScuderiaTrackData } from '../../lib/scuderia';
 
 function getYouTubeId(url: string): string | null {
   const match = url.match(
@@ -22,27 +23,12 @@ function formatDateDiff(days: number): string {
 }
 
 interface ScuderiaTrackProps {
-  article: {
-    id: string;
-    title: string;
-    artist: string[];
-    genres: string[];
-    thumb: string;
-    formattedDate: string;
-    content: string;
-    album: string | null;
-    youtube: string;
-  };
-  displayDate: string | null;
-  dateDiff: number | null;
+  article: ScuderiaTrackData;
 }
 
-export default function ScuderiaTrack({
-  article,
-  displayDate,
-  dateDiff,
-}: ScuderiaTrackProps) {
+export default function ScuderiaTrack({ article }: ScuderiaTrackProps) {
   const { current, play } = usePlayer();
+  const { displayDate, dateDiff } = article;
   const videoId = article.youtube ? getYouTubeId(article.youtube) : null;
   const isPlaying = current?.videoId === videoId;
 
@@ -105,15 +91,12 @@ export default function ScuderiaTrack({
               {article.album ? (
                 <>
                   <Disc size={14} />
-                  {`${article.album} (${new Date(
-                    article.formattedDate
-                  ).getFullYear()})`}
+                  {`${article.album} (${article.releaseYear})`}
                 </>
               ) : (
                 <>
                   <Music size={14} />
-                  Released as a single in{' '}
-                  {new Date(article.formattedDate).getFullYear()}
+                  Released as a single in {article.releaseYear}
                 </>
               )}
             </div>
@@ -121,12 +104,6 @@ export default function ScuderiaTrack({
         </div>
 
         <div className={styles.track__content}>{article.content}</div>
-        {/* {article.genres && article.genres.length > 0 && (
-          <div className={styles.track__genres}>
-            <Tag size={10} />
-            <span>{article.genres.join(', ')}</span>
-          </div>
-        )} */}
       </div>
     </div>
   );

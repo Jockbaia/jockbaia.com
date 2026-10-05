@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
 import styles from './page.module.scss';
 import { Calendar } from 'lucide-react';
 import {
@@ -9,35 +6,23 @@ import {
 } from '../../scripts/markdown-utils';
 import Logo from '../components/logo/Logo';
 import { getTagCategory } from '../lib/tag-categories';
-
-function formatDate(dateString: string) {
-  if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
-    const [day, month, year] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  }
-  return dateString;
-}
-
-const DATA_DIRECTORY = path.join(process.cwd(), 'content', 'posts');
+import { formatDate } from '../lib/dates';
+import { listPostIds, readPost } from '../lib/posts';
 
 // +++ Metadata handling +++
 
-export async function generateMetadata({ params }) {
-  const resolvedParams =
-    typeof params.then === 'function' ? await params : params;
-  const { id } = resolvedParams;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   try {
-    const fullPath = getMarkdownFilePath(id);
-    const { data } = getMarkdownFileData(fullPath);
+    const { data } = readPost(id);
     const thumb = data.thumb ? getImagePath(data.thumb, 'md', id) : '';
 
     return {
-      title: data.title + ' | Jockbaia' || '',
+      title: `${data.title} | Jockbaia`,
       description: data.excerpt || '',
       openGraph: {
         images: thumb ? [thumb] : [],
@@ -49,7 +34,7 @@ export async function generateMetadata({ params }) {
         'fediverse:creator': '@jockbaia@pan.rent',
       },
     };
-  } catch (e) {
+  } catch {
     return {
       title: 'Not found',
       description: '',
@@ -60,30 +45,7 @@ export async function generateMetadata({ params }) {
 // +++ Markdown handling +++
 
 export async function generateStaticParams() {
-  const entries = getDirectoryEntries();
-  return entries.map((entry) => ({
-    id: entry,
-  }));
-}
-
-function getDirectoryEntries() {
-  return fs
-    .readdirSync(DATA_DIRECTORY)
-    .filter((entry) =>
-      fs.statSync(path.join(DATA_DIRECTORY, entry)).isDirectory()
-    );
-}
-
-function getMarkdownFilePath(id: string) {
-  return path.join(DATA_DIRECTORY, id, `${id}.md`);
-}
-
-function getMarkdownFileData(fullPath: string) {
-  if (!fs.existsSync(fullPath)) {
-    throw new Error(`File not found: ${fullPath}`);
-  }
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  return matter(fileContents);
+  return listPostIds().map((id) => ({ id }));
 }
 
 // +++ Article rendering +++
@@ -94,23 +56,19 @@ export default async function Article({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const fullPath = getMarkdownFilePath(id);
-  const { data, content } = getMarkdownFileData(fullPath);
+  const { data, content } = readPost(id);
   const contentHtml = await convertMarkdownToHtml(content, id);
-  const tagCategory = getTagCategory(data.tags || [], 14);
-
-  const hasBlogTag = Array.isArray(data.tags) && data.tags.includes('blog');
-  const hasPicsTag =
-    Array.isArray(data.tags) && data.tags.includes('photography');
+  const tags: string[] = Array.isArray(data.tags) ? data.tags : [];
+  const isPics = tags.includes('photography');
+  const logo = tags.includes('blog') ? 'blog' : isPics ? 'pics' : undefined;
+  const tagCategory = getTagCategory(tags, 14);
 
   return (
     <div>
-      <Logo logo={hasBlogTag ? 'blog' : hasPicsTag ? 'pics' : undefined} />
+      <Logo logo={logo} />
       <div className={styles.container}>
-        {/* Title */}
         <div className={styles.title}>{data.title}</div>
 
-        {/* Metadata */}
         <div className={styles.dateRow}>
           <div className={styles.date}>
             <Calendar size={14} />
@@ -124,9 +82,8 @@ export default async function Article({
           )}
         </div>
 
-        {/* Content */}
         <article
-          className={styles.content}
+          className={`${styles.content} ${isPics ? styles['content--pics'] : ''}`}
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
       </div>
