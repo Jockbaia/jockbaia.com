@@ -1,4 +1,5 @@
 @use '../../styles/colors.scss' as colors;
+@use '../../styles/type.scss' as sizes;
 
 .page {
   display: flex;
@@ -41,7 +42,7 @@
 }
 
 .title {
-  font-size: 24px;
+  font-size: sizes.$xl;
   color: colors.$black;
   white-space: nowrap;
   overflow: hidden;
@@ -49,7 +50,7 @@
 }
 
 .date {
-  font-size: 16px;
+  font-size: sizes.$base;
   color: colors.$black;
 }
 
@@ -77,6 +78,6 @@
 
 .status {
   margin: auto;
-  font-size: 18px;
+  font-size: sizes.$md;
   color: colors.$black;
 }

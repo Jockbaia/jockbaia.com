@@ -1,3 +1,11 @@
+import styles from './loading.module.scss';
+
 export default function Loading() {
-  return <p>Loading...</p>;
+  return (
+    <div className={styles.loading}>
+      <span />
+      <span />
+      <span />
+    </div>
+  );
 }

@@ -1,4 +1,5 @@
 @use '../../styles/colors.scss' as colors;
+@use '../../styles/type.scss' as sizes;
 
 
 .grid {
@@ -40,14 +41,14 @@
     }
 
     &__title {
-        font-size: 20px;
+        font-size: sizes.$lg;
         line-height: 1.3;
         color: colors.$yellow;
         margin-bottom: 3px;
     }
 
     &__artist {
-        font-size: 16px;
+        font-size: sizes.$base;
         color: colors.$gray;
         min-height: 20px;
         line-height: 1.2;
@@ -61,7 +62,7 @@
     }
 
     &__album {
-        font-size: 16px;
+        font-size: sizes.$base;
         color: colors.$gray;
         min-height: 20px;
         line-height: 1.2;
@@ -101,7 +102,7 @@
         align-items: center;
         gap: 6px;
         color: colors.$gray;
-        font-size: 14px;
+        font-size: sizes.$sm;
         min-height: 20px;
         line-height: 1.2;
         text-transform: uppercase;
@@ -117,7 +118,7 @@
         align-items: center;
         gap: 4px;
         color: colors.$gray;
-        font-size: 14px;
+        font-size: sizes.$sm;
         font-weight: 500;
         white-space: nowrap;
 
@@ -134,7 +135,7 @@
     &__content {
         color: colors.$white;
         margin-top: 15px;
-        font-size: 17px;
+        font-size: sizes.$md;
         line-height: 22px;
         text-align: justify;
         text-align-last: left;
@@ -145,7 +146,7 @@
         background-color: colors.$black;
         border: 1px solid colors.$yellow;
         width: 26px;
-        font-size: 12px;
+        font-size: sizes.$xs;
         text-decoration: none;
         position: absolute;
         padding: 0 8px;
@@ -165,22 +166,7 @@
 
 @media (min-width: 601px) {
     .track {
-        &__title {
-            font-size: 21px;
-        }
-
-        &__artist,
-        &__album {
-            font-size: 17px;
-        }
-
-        &__date,
-        &__metric {
-            font-size: 15px;
-        }
-
         &__content {
-            font-size: 18px;
             line-height: 24px;
         }
     }

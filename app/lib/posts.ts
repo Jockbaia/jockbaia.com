@@ -1,5 +1,5 @@
 import path from 'path';
-import { getSmImagePath } from '../../scripts/markdown-utils';
+import { getSmImagePath } from './markdown';
 import { parseDate } from './dates';
 import { listDirectories, readMarkdown } from './fs';
 

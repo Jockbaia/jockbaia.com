@@ -6,7 +6,6 @@
     "compress-thumbnails": "node scripts/compress-thumbnails.js",
     "generate-radio-manifest": "node scripts/generate-radio-manifest.js",
     "dev": "npm run generate-radio-manifest && npm run compress-thumbnails && next dev",
-    "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "predev": "npm run lint",
@@ -18,7 +17,6 @@
     "next": "^16.0.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-spinners": "^0.17.0",
     "sass": "^1.89.0",
     "sharp": "^0.34.5"
   },

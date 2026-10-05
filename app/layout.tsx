@@ -1,7 +1,6 @@
 import '../styles/global.scss';
 import Script from 'next/script';
 import HeaderWrapper from './components/header/HeaderWrapper';
-import { getLatestScuderiaArticle } from './lib/scuderia';
 import { PlayerProvider } from './components/player/PlayerContext';
 import StickyPlayer from './components/player/StickyPlayer';
 
@@ -20,8 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const latestScuderia = getLatestScuderiaArticle();
-
   return (
     <html lang="en">
       <body>
@@ -31,7 +28,7 @@ export default function RootLayout({
             data-website-id="cd1ed67a-ecc1-49d8-b729-26800993865f"
             strategy="lazyOnload"
           />
-          <HeaderWrapper latestScuderia={latestScuderia} />
+          <HeaderWrapper />
           {children}
           <StickyPlayer />
         </PlayerProvider>

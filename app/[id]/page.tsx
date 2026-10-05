@@ -1,9 +1,6 @@
 import styles from './page.module.scss';
 import { Calendar } from 'lucide-react';
-import {
-  convertMarkdownToHtml,
-  getImagePath,
-} from '../../scripts/markdown-utils';
+import { convertMarkdownToHtml, getImagePath } from '../lib/markdown';
 import Logo from '../components/logo/Logo';
 import { getTagCategory } from '../lib/tag-categories';
 import { formatDate } from '../lib/dates';

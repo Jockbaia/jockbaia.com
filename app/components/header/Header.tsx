@@ -3,8 +3,15 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import {
+  Camera,
+  Disc,
+  FileText,
+  Music,
+  User,
+  type LucideIcon,
+} from 'lucide-react';
 import styles from './Header.module.scss';
-import type { ScuderiaArticle } from '../../lib/scuderia';
 
 function getLogoSrc(logo: string | undefined | null): string {
   return logo === 'blog'
@@ -20,19 +27,15 @@ function detectLogo(pathname: string): string | undefined {
   return undefined;
 }
 
-interface HeaderProps {
-  latestScuderia?: ScuderiaArticle | null;
-}
-
-const NAV_ITEMS: [href: string, label: string][] = [
-  ['/about', 'About'],
-  ['/tag/blog', 'Blog'],
-  ['/tag/music', 'Music'],
-  ['/tag/album-arts', 'Album Arts'],
-  ['/tag/photography', 'Pics'],
+const NAV_ITEMS: [href: string, label: string, Icon: LucideIcon][] = [
+  ['/about', 'About', User],
+  ['/tag/blog', 'Blog', FileText],
+  ['/tag/music', 'Music', Music],
+  ['/tag/album-arts', 'Album Arts', Disc],
+  ['/tag/photography', 'Pics', Camera],
 ];
 
-export default function Header({ latestScuderia }: HeaderProps) {
+export default function Header() {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(() => detectLogo(pathname));
@@ -130,57 +133,18 @@ export default function Header({ latestScuderia }: HeaderProps) {
         <nav
           className={`${styles.sidebar} ${sidebarOpen ? styles['sidebar--open'] : ''}`}
         >
-          <ul className={styles.sidebar__list}>
-            {NAV_ITEMS.map(([href, label]) => (
-              <li key={href}>
-                <Link href={href} onClick={closeSidebar}>
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          {latestScuderia && (
-            <Link
-              href="/scuderia"
-              className={styles.nowListening}
-              onClick={closeSidebar}
-            >
-              <span className={styles.nowListening__label}>
-                now listening
-                <svg
-                  className={styles.nowListening__music}
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 18V5l12-2v13" />
-                  <circle cx="6" cy="18" r="3" />
-                  <circle cx="18" cy="16" r="3" />
-                </svg>
-              </span>
-              <div className={styles.nowListening__card}>
-                <div className={styles.nowListening__info}>
-                  <span className={styles.nowListening__title}>
-                    {latestScuderia.title}
-                  </span>
-                  <span className={styles.nowListening__artist}>
-                    {latestScuderia.artist?.join(', ')}
-                  </span>
-                </div>
-                <img
-                  src={latestScuderia.thumb}
-                  alt={latestScuderia.title}
-                  className={styles.nowListening__thumb}
-                  width="48"
-                  height="48"
-                />
-              </div>
-            </Link>
-          )}
+          <div className={styles.sidebar__panel}>
+            <ul className={styles.sidebar__list}>
+              {NAV_ITEMS.map(([href, label, Icon]) => (
+                <li key={href}>
+                  <Link href={href} onClick={closeSidebar}>
+                    <Icon size={18} strokeWidth={1.2} aria-hidden="true" />
+                    <span>{label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       </div>
     </header>

@@ -22,11 +22,11 @@
 ## symlinks to content/posts/ (created by compress-thumbnails)
 /public/i/[0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z]
 
-# sitemaps
-/public/sitemap.xml
-
 # production
 /build
+
+# typescript
+/tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
