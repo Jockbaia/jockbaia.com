@@ -5,8 +5,12 @@ import type { ScuderiaArticle } from '../../lib/scuderia';
 
 interface HeaderWrapperProps {
   latestScuderia?: ScuderiaArticle | null;
+  navRecency?: Record<string, number>;
 }
 
-export default function HeaderWrapper({ latestScuderia }: HeaderWrapperProps) {
-  return <Header latestScuderia={latestScuderia} />;
+export default function HeaderWrapper({
+  latestScuderia,
+  navRecency,
+}: HeaderWrapperProps) {
+  return <Header latestScuderia={latestScuderia} navRecency={navRecency} />;
 }

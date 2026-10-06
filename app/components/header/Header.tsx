@@ -30,6 +30,7 @@ function detectLogo(pathname: string): string | undefined {
 
 interface HeaderProps {
   latestScuderia?: ScuderiaArticle | null;
+  navRecency?: Record<string, number>;
 }
 
 const NAV_ITEMS: [href: string, label: string, Icon: LucideIcon][] = [
@@ -40,8 +41,13 @@ const NAV_ITEMS: [href: string, label: string, Icon: LucideIcon][] = [
   ['/tag/photography', 'Pics', Camera],
 ];
 
-export default function Header({ latestScuderia }: HeaderProps) {
+export default function Header({ latestScuderia, navRecency }: HeaderProps) {
   const pathname = usePathname();
+  const sortedNavItems = [...NAV_ITEMS].sort((a, b) => {
+    if (a[0] === '/about') return -1;
+    if (b[0] === '/about') return 1;
+    return (navRecency?.[b[0]] ?? 0) - (navRecency?.[a[0]] ?? 0);
+  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(() => detectLogo(pathname));
   const [nextLogo, setNextLogo] = useState<string | undefined | null>(null);
@@ -139,7 +145,7 @@ export default function Header({ latestScuderia }: HeaderProps) {
         >
           <div className={styles.sidebar__panel}>
             <ul className={styles.sidebar__list}>
-              {NAV_ITEMS.map(([href, label, Icon]) => (
+              {sortedNavItems.map(([href, label, Icon]) => (
                 <li key={href}>
                   <Link href={href} onClick={closeSidebar}>
                     <Icon size={18} strokeWidth={1.2} aria-hidden="true" />
