@@ -48,6 +48,11 @@
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: colors.$yellow;
+  }
 
   svg {
     flex-shrink: 0;

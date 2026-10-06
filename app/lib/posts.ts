@@ -33,7 +33,7 @@ export function getPosts(tag?: string): Post[] {
         hidden: data.hidden || false,
       };
     })
-    .filter((post) => !post.hidden)
+    .filter((post) => tag || !post.hidden)
     .filter(
       (post) =>
         !tag || post.tags.some((t) => normalizeTag(t) === normalizeTag(tag))

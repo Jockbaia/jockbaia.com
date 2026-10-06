@@ -29,7 +29,6 @@ function getAllUrls() {
   const tagUrls = [
     ...new Set(
       posts
-        .filter((post) => !post.hidden)
         .flatMap((post) => post.tags || [])
         .map((tag) => tag.toLowerCase().replace(/\s+/g, '-'))
     ),
