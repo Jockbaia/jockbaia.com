@@ -4,6 +4,7 @@
     "build": "npm run compress-thumbnails && next build",
     "postbuild": "node scripts/generate-sitemap.js",
     "compress-thumbnails": "node scripts/compress-thumbnails.js",
+    "new:scuderia": "node scripts/new-scuderia.js",
     "dev": "npm run compress-thumbnails && next dev",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
