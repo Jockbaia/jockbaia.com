@@ -160,21 +160,33 @@ $accent: colors.$yellow;
     list-style: none;
     margin: 0;
     padding: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 4px;
-    text-align: center;
 
     li a {
       color: $accent;
       text-decoration: none;
       font-size: sizes.$lg;
       text-transform: lowercase;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 10px;
-      padding: 6px 16px;
+      width: 100%;
+      padding: 6px 2px;
+
+      span {
+        order: 2;
+      }
+
+      &::after {
+        content: '';
+        order: 1;
+        flex: 1;
+        height: 0;
+        border-bottom: 1px solid rgba(colors.$white, 0.35);
+      }
     }
   }
 

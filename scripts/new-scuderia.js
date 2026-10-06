@@ -128,6 +128,24 @@ function deriveMeta(oembed) {
   return { title, artist: channel };
 }
 
+async function cropToSquare(buffer) {
+  try {
+    const sharp = require('sharp');
+    const meta = await sharp(buffer).metadata();
+    if (!meta.width || !meta.height) return null;
+    const size = Math.min(meta.width, meta.height);
+    const cropped = await sharp(buffer)
+      .resize(size, size, { fit: 'cover', position: 'centre' })
+      .jpeg({ quality: 90 })
+      .toBuffer();
+    return { buffer: cropped, size };
+  } catch (err) {
+    const reason = err.message.split('\n')[0];
+    console.warn(`  ! cover crop failed (${reason}) - saving original`);
+    return null;
+  }
+}
+
 async function downloadCover(videoId, destPath) {
   const candidates = ['maxresdefault', 'hq720', 'sddefault', 'hqdefault'];
   for (const name of candidates) {
@@ -137,8 +155,14 @@ async function downloadCover(videoId, destPath) {
       if (!res.ok) continue;
       const buffer = Buffer.from(await res.arrayBuffer());
       if (buffer.length < 5000) continue;
-      fs.writeFileSync(destPath, buffer);
-      return { name, bytes: buffer.length };
+      const cropped = await cropToSquare(buffer);
+      const output = cropped ? cropped.buffer : buffer;
+      fs.writeFileSync(destPath, output);
+      return {
+        name,
+        bytes: output.length,
+        size: cropped ? `${cropped.size}x${cropped.size}` : null,
+      };
     } catch {
       // try the next size
     }
@@ -265,7 +289,7 @@ async function main() {
   console.log(`  md:     ${id}.md`);
   if (cover) {
     console.log(
-      `  cover:  ${id}.jpg (${cover.name}, ${(cover.bytes / 1024).toFixed(0)} kB)`
+      `  cover:  ${id}.jpg (${cover.name}${cover.size ? ` -> ${cover.size}` : ''}, ${(cover.bytes / 1024).toFixed(0)} kB)`
     );
   } else {
     console.log(`  cover:  MISSING - drop an image in the folder as ${id}.jpg`);
