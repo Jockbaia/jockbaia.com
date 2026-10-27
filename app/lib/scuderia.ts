@@ -42,6 +42,7 @@ export function getScuderiaTracks(): ScuderiaTrackData[] {
         dateDiff: inserted && released ? daysBetween(inserted, released) : null,
       };
     })
+    .filter((track) => track.content.trim() !== '')
     .sort((a, b) => b.id.slice(0, 6).localeCompare(a.id.slice(0, 6)));
 }
 
